@@ -17,10 +17,13 @@ skebob_str:
     .string "Skebob"
 
 START:
+
 	STACK_INIT
+    
+    LWI R1, 2
+
 	JMP video_clear_loop
 
-    LWI R1, 1
 video_clear_loop:
     
     PUSH R1
@@ -29,6 +32,8 @@ video_clear_loop:
     
     POP R1
     
+    
+
     PUSH R1
 
     Video_Clear R1
@@ -44,15 +49,15 @@ video_clear_loop:
 
     Video_Print skebob_str, R0, R0, R1, R2
 
+    Video_Present
+
     POP R1
 
+    
 
     PUSH R1
         Input_IsKeyJustPressed globalvar_keystate_offset_up
     POP R1
-
-    
-   
 
     LWI R7, key_pressed_down
     JEZ R7, R0

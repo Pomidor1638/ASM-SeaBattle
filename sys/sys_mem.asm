@@ -3,21 +3,23 @@
 #define _SYS_MEM_ASM_
 
 #define ROM_BASE_ADDR 0
-#define ROM_SIZE 16384
+#define ROM_SIZE 32768
 
-#define RAM_BASE_ADDR 16384
-#define RAM_SIZE 16384
+#define RAM_BASE_ADDR 32768
+#define RAM_SIZE 30348
 
-#define VRAM_BASE_ADDR 32768
+#define VRAM_BASE_ADDR 63116
 #define VRAM_SIZE 1200
 
-#define NET_BASE_ADDR 33968
+#define BUF_VRAM_BASE_ADDR 64316
+
+#define NET_BASE_ADDR 65516
 #define NET_SIZE 17
 
-#define KEYBOARD_BASE_ADDR 33985
+#define KEYBOARD_BASE_ADDR 65533
 #define KEYBOARD_SIZE 1
 
-#define SEVEN_SEG_BASE_ADDR 33986
+#define SEVEN_SEG_BASE_ADDR 65534
 #define SEVEN_SEG_SIZE 2
 
 // This macroses distort R7 and R6 regs,
@@ -57,5 +59,8 @@
     SUB R7, R7, R5
     SWD R6, R7
 #endmacro
+
+
+
 
 #endif

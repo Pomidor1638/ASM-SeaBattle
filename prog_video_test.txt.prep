@@ -1,0 +1,920 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_memcpy:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, _memcpy_return
+_memcpy_copy_loop:
+JEZ R7, R1
+LWD R3, R0
+SWD R2, R3
+INC R0, R0
+INC R2, R2
+DEC R1, R1
+JMP _memcpy_copy_loop
+_memcpy_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_Video_Clear:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+
+LWI R7, 63115
+LWD R6, R7
+
+LWI R0, 64316
+LWI R7, 3
+ADD R7, R6, R7
+LWD R4, R7
+
+MLH R4, R4, R4
+LWI R1, 1200
+ADD R5, R0, R1
+_Video_Clear_i_loop:
+SUB R1, R0, R5
+LWI R7, __Video_Clear_return
+JEZ R7, R1
+SWD R0, R4
+INC R0, R0
+JMP _Video_Clear_i_loop
+__Video_Clear_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+_Video_Print:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+
+
+
+
+
+LWI R7, 63115
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, 5
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 7
+ADD R7, R6, R7
+LWD R3, R7
+
+LWI R7, 6
+ADD R7, R6, R7
+LWD R4, R7
+
+LWI R7, 0x000f
+AND R3, R3, R7
+LWI R7, 8
+SLL R3, R3, R7
+LWI R7, 0x000f
+AND R4, R4, R7
+LWI R7, 12
+SLL R4, R4, R7
+ORR R6, R3, R4
+LWI R4, 40
+MUL R4, R4, R2
+ADD R4, R4, R1
+LWI R7, 64316
+ADD R4, R4, R7
+LWI R5, 1200
+ADD R5, R5, R7
+LWI R3, 0x0000
+_Video_Print_print_loop:
+SUB R1, R4, R5
+LWI R7, _Video_Print_return
+JEZ R7, R1
+LWI R1, 0
+LWD R2, R0
+LWI R7, _Video_Print_pull_high_byte
+JNZ R7, R3
+MLL R1, R1, R2
+JMP _Video_Print_put_char
+_Video_Print_pull_high_byte:
+MLH R1, R1, R2
+_Video_Print_put_char:
+LWI R7, _Video_Print_return
+JEZ R7, R1
+LWI R7, 32
+SUB R1, R1, R7
+ADD R1, R1, R6
+SWD R4, R1
+INC R4, R4
+NOT R3, R3
+LWI R7, _Video_Print_str_inc
+JEZ R7, R3
+JMP _Video_Print_print_loop
+_Video_Print_str_inc:
+INC R0, R0
+JMP _Video_Print_print_loop
+_Video_Print_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_Input_Update_Keyboard_states:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+LWI R6, 0
+LWI R7, 32768
+ADD R6, R6, R7
+LWI R0, 0
+_Input_Update_Keyboard_states_prev_sates_update_loop:
+LWI R7, 9
+SUB R1, R0, R7
+LWI R7, _Input_Update_Keyboard_states_payload_loop
+JEZ R7, R1
+ADD R1, R0, R6
+LWD R2, R1
+MLL R2, R2, R2
+SWD R1, R2
+INC R0, R0
+JMP _Input_Update_Keyboard_states_prev_sates_update_loop
+_Input_Update_Keyboard_states_payload_loop:
+LWI R0, 65533
+LWD R0, R0
+LWI R7, _Input_Update_Keyboard_states_return
+JEZ R7, R0
+LWI R1, 0x01FF
+AND R1, R1, R0
+LWI R2, 0x0015
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_E
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 4
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_E:
+LWI R2, 0x0024
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_R
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 5
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_R:
+LWI R2, 0x002D
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_RETURN
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 6
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_RETURN:
+LWI R2, 0x005A
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 7
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE:
+LWI R2, 0x0076
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_UP
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 8
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_UP:
+LWI R2, 0x0175
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 0
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_LEFT:
+LWI R2, 0x016B
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 1
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_DOWN:
+LWI R2, 0x0172
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 2
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT:
+LWI R2, 0x0174
+SUB R2, R1, R2
+LWI R7, _Input_Update_Keyboard_states_payload_loop
+JNZ R7, R2
+LWI R7, 32768
+LWI R3, 3
+ADD R3, R3, R7
+LWI R1, 0x0200
+AND R1, R1, R0
+LWD R2, R3
+MHH R2, R2, R1
+SWD R3, R2
+JMP _Input_Update_Keyboard_states_payload_loop
+_Input_Update_Keyboard_states_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skebob_str:
+.string "Skebob"
+START:
+LWI R7, 63112
+LWI R6, 63115
+SWD R6, R7
+
+LWI R1, 2
+JMP video_clear_loop
+video_clear_loop:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R7, _Input_Update_Keyboard_states
+JRL R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R0, 4
+LWI R0, 4
+LWI R1, 1
+LWI R2, 2
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R0, skebob_str
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Print
+JRL R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R0, 64316
+LWI R1, 1200
+LWI R2, 63116
+LWI R7, _memcpy
+JRL R6, R7
+_memcpy_end:
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 0
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R7, key_pressed_down
+JEZ R7, R0
+INC R1, R1
+LWI R7, 0x000f
+AND R1, R1, R7
+key_pressed_down:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 2
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R7, video_clear_loop
+JEZ R7, R0
+DEC R1, R1
+LWI R7, 0x000f
+AND R1, R1, R7
+JMP video_clear_loop

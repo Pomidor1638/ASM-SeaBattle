@@ -2,10 +2,10 @@
 #ifndef _SYS_STACK_ASM_
 #define _SYS_STACK_ASM_
 
-#define SP_PTR          32767
-#define RETURN_BUF_PTR  32766
-#define PREV_SP_BUF_PTR 32765
-#define STACK_START     32764
+#define SP_PTR          63115
+#define RETURN_BUF_PTR  63114
+#define PREV_SP_BUF_PTR 63113
+#define STACK_START     63112
 
 #macro STACK_INIT
 	LWI R7, STACK_START

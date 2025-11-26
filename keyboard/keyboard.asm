@@ -29,7 +29,7 @@ FUNCTION _Input_Update_Keyboard_states, 0
     LWI R0, 0
 
 _Input_Update_Keyboard_states_prev_sates_update_loop:
-    
+
     LWI R7, globalvar_keystates_size
     SUB R1, R0, R7 // i - size
     LWI R7, _Input_Update_Keyboard_states_payload_loop
@@ -46,10 +46,10 @@ _Input_Update_Keyboard_states_prev_sates_update_loop:
 
 _Input_Update_Keyboard_states_payload_loop:
 
-// 
     LWI R0, KEYBOARD_BASE_ADDR
     LWD R0, R0
 
+    
     LWI R7, _Input_Update_Keyboard_states_return
     JEZ R7, R0 
 
