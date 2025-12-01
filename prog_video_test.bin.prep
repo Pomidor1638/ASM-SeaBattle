@@ -232,10 +232,6 @@
 
 
 
-
-
-
-
 _memcpy:
 LWI R7, 63114
 SWD R7, R6
@@ -282,6 +278,86 @@ SWD R6, R7
 LWI R3, 63115
 SWD R3, R5
 JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -378,6 +454,11 @@ SWD R6, R7
 LWI R3, 63115
 SWD R3, R5
 JPR R4
+
+
+
+
+
 
 _Video_Print:
 LWI R7, 63114
@@ -539,6 +620,76 @@ JPR R4
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _Input_Update_Keyboard_states:
 LWI R7, 63114
 SWD R7, R6
@@ -567,10 +718,9 @@ LWI R7, 32768
 ADD R6, R6, R7
 LWI R0, 0
 _Input_Update_Keyboard_states_prev_sates_update_loop:
-LWI R7, 9
-SUB R1, R0, R7
+LWI R1, 9
 LWI R7, _Input_Update_Keyboard_states_payload_loop
-JEZ R7, R1
+JEQ R7, R0, R1
 ADD R1, R0, R6
 LWD R2, R1
 MLL R2, R2, R2
@@ -585,9 +735,8 @@ JEZ R7, R0
 LWI R1, 0x01FF
 AND R1, R1, R0
 LWI R2, 0x0015
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_E
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 4
 ADD R3, R3, R7
@@ -627,9 +776,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_RETURN:
 LWI R2, 0x005A
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 7
 ADD R3, R3, R7
@@ -641,9 +789,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE:
 LWI R2, 0x0076
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_UP
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 8
 ADD R3, R3, R7
@@ -655,9 +802,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_UP:
 LWI R2, 0x0175
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT
-JNZ R7, R2
+JNQ R7, R2, R1
 LWI R7, 32768
 LWI R3, 0
 ADD R3, R3, R7
@@ -669,9 +815,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT:
 LWI R2, 0x016B
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 1
 ADD R3, R3, R7
@@ -683,9 +828,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN:
 LWI R2, 0x0172
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 2
 ADD R3, R3, R7
@@ -697,9 +841,8 @@ SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT:
 LWI R2, 0x0174
-SUB R2, R1, R2
 LWI R7, _Input_Update_Keyboard_states_payload_loop
-JNZ R7, R2
+JNQ R7, R1, R2
 LWI R7, 32768
 LWI R3, 3
 ADD R3, R3, R7
@@ -749,16 +892,50 @@ JPR R4
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 skebob_str:
-.string "Skebob"
+.string "Mega Skebob"
 START:
 LWI R7, 63112
 LWI R6, 63115
 SWD R6, R7
 
-LWI R1, 2
-JMP video_clear_loop
-video_clear_loop:
+LWI R1, 1
+JMP mega_loop
+mega_loop:
 LWI R6, 63115
 LWD R7, R6
 SWD R7, R1
@@ -771,90 +948,6 @@ LWI R6, 63113
 SWD R6, R7
 LWI R7, _Input_Update_Keyboard_states
 JRL R6, R7
-
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R1, R7
-SWD R6, R7
-
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R1
-DEC R7, R7
-SWD R6, R7
-
-LWI R7, 63115
-LWD R7, R7
-LWI R6, 63113
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R1
-DEC R7, R7
-SWD R6, R7
-LWI R7, _Video_Clear
-JRL R6, R7
-
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R1, R7
-SWD R6, R7
-
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R1
-DEC R7, R7
-SWD R6, R7
-
-LWI R0, 4
-LWI R0, 4
-LWI R1, 1
-LWI R2, 2
-LWI R7, 63115
-LWD R7, R7
-LWI R6, 63113
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R2
-DEC R7, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R1
-DEC R7, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R0
-DEC R7, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R0
-DEC R7, R7
-SWD R6, R7
-LWI R0, skebob_str
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R0
-DEC R7, R7
-SWD R6, R7
-LWI R7, _Video_Print
-JRL R6, R7
-
-LWI R7, 63115
-LWD R7, R7
-LWI R6, 63113
-SWD R6, R7
-LWI R0, 64316
-LWI R1, 1200
-LWI R2, 63116
-LWI R7, _memcpy
-JRL R6, R7
-_memcpy_end:
 
 LWI R6, 63115
 LWD R7, R6
@@ -884,12 +977,12 @@ INC R7, R7
 LWD R1, R7
 SWD R6, R7
 
-LWI R7, key_pressed_down
+LWI R7, check_pressed_down
 JEZ R7, R0
 INC R1, R1
 LWI R7, 0x000f
 AND R1, R1, R7
-key_pressed_down:
+check_pressed_down:
 LWI R6, 63115
 LWD R7, R6
 SWD R7, R1
@@ -912,9 +1005,127 @@ INC R7, R7
 LWD R1, R7
 SWD R6, R7
 
-LWI R7, video_clear_loop
+LWI R7, pakcet_recevied
 JEZ R7, R0
 DEC R1, R1
 LWI R7, 0x000f
 AND R1, R1, R7
-JMP video_clear_loop
+pakcet_recevied:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 65516
+LWD R0, R7
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R7, draw
+JEZ R7, R0
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 65516
+LWI R6, 0x0100
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+INC R1, R1
+LWI R7, 0x000f
+AND R1, R1, R7
+JMP pakcet_recevied
+draw:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+LWI R1, 5
+LWI R2, 1
+LWI R3, 0
+LWI R0, skebob_str
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Print
+JRL R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R0, 64316
+LWI R1, 1200
+LWI R2, 63116
+LWI R7, _memcpy
+JRL R6, R7
+_memcpy_end:
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+JMP mega_loop

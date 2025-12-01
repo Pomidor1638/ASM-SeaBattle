@@ -30,10 +30,10 @@ FUNCTION _Input_Update_Keyboard_states, 0
 
 _Input_Update_Keyboard_states_prev_sates_update_loop:
 
-    LWI R7, globalvar_keystates_size
-    SUB R1, R0, R7 // i - size
+    LWI R1, globalvar_keystates_size
+    //SUB R1, R0, R7 // i - size
     LWI R7, _Input_Update_Keyboard_states_payload_loop
-    JEZ R7, R1 // i == size ?
+    JEQ R7, R0, R1 // i == size ?
 
     ADD R1, R0, R6
 
@@ -62,9 +62,8 @@ _Input_Update_Keyboard_states_payload_loop:
 // case SCANCODE_Q:
     // sc == SCANCODE_Q ?
     LWI R2, SCANCODE_Q
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_E
-    JNZ R7, R2 // sc != SCANCODE_Q  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_E
+    JNQ R7, R1, R2 // sc != SCANCODE_Q  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_E
     // sc == SCANCODE_Q
     
     LWI R7, RAM_BASE_ADDR
@@ -126,9 +125,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_R:
 _Input_Update_Keyboard_states_CASE_SCANCODE_RETURN:
     // sc == SCANCODE_RETURN ?
     LWI R2, SCANCODE_RETURN
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_RETURN  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE
+    JNQ R7, R1, R2 // sc != SCANCODE_RETURN  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE
     // sc == SCANCODE_RETURN
     
     LWI R7, RAM_BASE_ADDR
@@ -147,9 +145,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_RETURN:
 _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE:
     // sc == SCANCODE_ESCAPE ?
     LWI R2, SCANCODE_ESCAPE
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_UP // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_ESCAPE  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_UP
+    JNQ R7, R1, R2 // sc != SCANCODE_ESCAPE  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_UP
     // sc == SCANCODE_ESCAPE
     
     LWI R7, RAM_BASE_ADDR
@@ -168,9 +165,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_ESCAPE:
 _Input_Update_Keyboard_states_CASE_SCANCODE_UP:
     // sc == SCANCODE_UP ?
     LWI R2, SCANCODE_UP
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_UP  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT
+    JNQ R7, R2, R1 // sc != SCANCODE_UP  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT
     // sc == SCANCODE_UP
     
     LWI R7, RAM_BASE_ADDR
@@ -189,9 +185,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_UP:
 _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT:
     // sc == SCANCODE_LEFT ?
     LWI R2, SCANCODE_LEFT
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_LEFT  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN
+    JNQ R7, R1, R2 // sc != SCANCODE_LEFT  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN
     // sc == SCANCODE_LEFT
     
     LWI R7, RAM_BASE_ADDR
@@ -210,9 +205,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_LEFT:
 _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN:
     // sc == SCANCODE_DOWN ?
     LWI R2, SCANCODE_DOWN
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_DOWN  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT
+    JNQ R7, R1, R2 // sc != SCANCODE_DOWN  ? -> JMP _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT
     // sc == SCANCODE_DOWN
     
     LWI R7, RAM_BASE_ADDR
@@ -231,9 +225,8 @@ _Input_Update_Keyboard_states_CASE_SCANCODE_DOWN:
 _Input_Update_Keyboard_states_CASE_SCANCODE_RIGHT:
     // sc == SCANCODE_RIGHT ?
     LWI R2, SCANCODE_RIGHT
-    SUB R2, R1, R2
     LWI R7, _Input_Update_Keyboard_states_payload_loop // for now shut this
-    JNZ R7, R2 // sc != SCANCODE_RIGHT  ? -> JMP _Input_Update_Keyboard_states_payload_loop
+    JNQ R7, R1, R2 // sc != SCANCODE_RIGHT  ? -> JMP _Input_Update_Keyboard_states_payload_loop
     // sc == SCANCODE_RIGHT
     
     LWI R7, RAM_BASE_ADDR

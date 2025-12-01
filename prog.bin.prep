@@ -1,0 +1,641 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_memcpy:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, _memcpy_return
+_memcpy_copy_loop:
+JEZ R7, R1
+LWD R3, R0
+SWD R2, R3
+INC R0, R0
+INC R2, R2
+DEC R1, R1
+JMP _memcpy_copy_loop
+_memcpy_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_Video_Clear:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+
+LWI R7, 63115
+LWD R6, R7
+
+LWI R0, 64316
+LWI R7, 3
+ADD R7, R6, R7
+LWD R4, R7
+
+MLH R4, R4, R4
+LWI R1, 1200
+ADD R5, R0, R1
+_Video_Clear_i_loop:
+SUB R1, R0, R5
+LWI R7, __Video_Clear_return
+JEZ R7, R1
+SWD R0, R4
+INC R0, R0
+JMP _Video_Clear_i_loop
+__Video_Clear_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+_Video_Print:
+LWI R7, 63114
+SWD R7, R6
+LWI R5, 0
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R5
+SWD R6, R7
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+
+
+
+
+
+LWI R7, 63115
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, 5
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 7
+ADD R7, R6, R7
+LWD R3, R7
+
+LWI R7, 6
+ADD R7, R6, R7
+LWD R4, R7
+
+LWI R7, 0x000f
+AND R3, R3, R7
+LWI R7, 8
+SLL R3, R3, R7
+LWI R7, 0x000f
+AND R4, R4, R7
+LWI R7, 12
+SLL R4, R4, R7
+ORR R6, R3, R4
+LWI R4, 40
+MUL R4, R4, R2
+ADD R4, R4, R1
+LWI R7, 64316
+ADD R4, R4, R7
+LWI R5, 1200
+ADD R5, R5, R7
+LWI R3, 0x0000
+_Video_Print_print_loop:
+SUB R1, R4, R5
+LWI R7, _Video_Print_return
+JEZ R7, R1
+LWI R1, 0
+LWD R2, R0
+LWI R7, _Video_Print_pull_high_byte
+JNZ R7, R3
+MLL R1, R1, R2
+JMP _Video_Print_put_char
+_Video_Print_pull_high_byte:
+MLH R1, R1, R2
+_Video_Print_put_char:
+LWI R7, _Video_Print_return
+JEZ R7, R1
+LWI R7, 32
+SUB R1, R1, R7
+ADD R1, R1, R6
+SWD R4, R1
+INC R4, R4
+NOT R3, R3
+LWI R7, _Video_Print_str_inc
+JEZ R7, R3
+JMP _Video_Print_print_loop
+_Video_Print_str_inc:
+INC R0, R0
+JMP _Video_Print_print_loop
+_Video_Print_return:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+START:
+LWI R7, 63112
+LWI R6, 63115
+SWD R6, R7
+
+LWI R1, 0
+JMP video_loop
+video_loop:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+LWI R7, 63115
+LWD R7, R7
+LWI R6, 63113
+SWD R6, R7
+LWI R0, 64316
+LWI R1, 1200
+LWI R2, 63116
+LWI R7, _memcpy
+JRL R6, R7
+_memcpy_end:
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+INC R1, R1
+LWI R7, 0xf
+AND R1, R1, R7
+JMP video_loop
