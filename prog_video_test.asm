@@ -38,13 +38,25 @@ check_pressed_down:
         Input_IsKeyJustPressed globalvar_keystate_offset_down
     POP R1
 
-    LWI R7, pakcet_recevied
+    LWI R7, enter_pressed_down
     JEZ R7, R0
 
     DEC R1, R1
 
     LWI R7, 0x000f
     AND R1, R1, R7
+
+enter_pressed_down:
+    PUSH R1
+        Input_IsKeyJustPressed globalvar_keystate_offset_return
+    POP R1
+
+    LWI R7, pakcet_recevied
+    JEZ R7, R0
+
+    PUSH R1
+        NET_SendPacket
+    POP R1
 
 pakcet_recevied:
     
@@ -57,7 +69,6 @@ pakcet_recevied:
 
     PUSH R1
         NET_PopPacket
-        NET_SendPacket
     POP R1
 
     INC R1, R1

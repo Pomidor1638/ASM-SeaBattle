@@ -169,6 +169,56 @@
 
 
 
+__std_function_prologue:
+LWI R7, 63114
+SWD R7, R6
+LWI R6, 63115
+LWD R7, R6
+SUB R7, R7, R3
+SWD R6, R7
+
+LWI R7, 63113
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 63114
+LWD R5, R7
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+
+JPR R4
+__std_function_epilogue:
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R4, R7
+SWD R6, R7
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R5, R7
+SWD R6, R7
+
+LWI R3, 63115
+SWD R3, R5
+JPR R4
+
+
+
+
+
+
+
+
+
 
 
 
@@ -233,27 +283,9 @@
 
 
 _memcpy:
-LWI R7, 63114
-SWD R7, R6
-LWI R5, 0
-LWI R6, 63115
-LWD R7, R6
-SUB R7, R7, R5
-SWD R6, R7
-LWI R7, 63113
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
-LWI R7, 63114
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
 
 LWI R7, _memcpy_return
 _memcpy_copy_loop:
@@ -265,19 +297,7 @@ INC R2, R2
 DEC R1, R1
 JMP _memcpy_copy_loop
 _memcpy_return:
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R4, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R5, R7
-SWD R6, R7
-LWI R3, 63115
-SWD R3, R5
-JPR R4
+JMP __std_function_epilogue
 
 
 
@@ -399,27 +419,9 @@ JPR R4
 
 
 _Video_Clear:
-LWI R7, 63114
-SWD R7, R6
-LWI R5, 0
-LWI R6, 63115
-LWD R7, R6
-SUB R7, R7, R5
-SWD R6, R7
-LWI R7, 63113
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
-LWI R7, 63114
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
 
 
 LWI R7, 63115
@@ -441,19 +443,7 @@ SWD R0, R4
 INC R0, R0
 JMP _Video_Clear_i_loop
 __Video_Clear_return:
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R4, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R5, R7
-SWD R6, R7
-LWI R3, 63115
-SWD R3, R5
-JPR R4
+JMP __std_function_epilogue
 
 
 
@@ -461,27 +451,9 @@ JPR R4
 
 
 _Video_Print:
-LWI R7, 63114
-SWD R7, R6
-LWI R5, 0
-LWI R6, 63115
-LWD R7, R6
-SUB R7, R7, R5
-SWD R6, R7
-LWI R7, 63113
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
-LWI R7, 63114
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
 
 
 
@@ -556,19 +528,7 @@ _Video_Print_str_inc:
 INC R0, R0
 JMP _Video_Print_print_loop
 _Video_Print_return:
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R4, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R5, R7
-SWD R6, R7
-LWI R3, 63115
-SWD R3, R5
-JPR R4
+JMP __std_function_epilogue
 
 
 
@@ -691,27 +651,9 @@ JPR R4
 
 
 _Input_Update_Keyboard_states:
-LWI R7, 63114
-SWD R7, R6
-LWI R5, 0
-LWI R6, 63115
-LWD R7, R6
-SUB R7, R7, R5
-SWD R6, R7
-LWI R7, 63113
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
-LWI R7, 63114
-LWD R5, R7
-LWI R6, 63115
-LWD R7, R6
-SWD R7, R5
-DEC R7, R7
-SWD R6, R7
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
 
 LWI R6, 0
 LWI R7, 32768
@@ -853,19 +795,7 @@ MHH R2, R2, R1
 SWD R3, R2
 JMP _Input_Update_Keyboard_states_payload_loop
 _Input_Update_Keyboard_states_return:
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R4, R7
-SWD R6, R7
-LWI R6, 63115
-LWD R7, R6
-INC R7, R7
-LWD R5, R7
-SWD R6, R7
-LWI R3, 63115
-SWD R3, R5
-JPR R4
+JMP __std_function_epilogue
 
 
 
@@ -1005,11 +935,54 @@ INC R7, R7
 LWD R1, R7
 SWD R6, R7
 
-LWI R7, pakcet_recevied
+LWI R7, enter_pressed_down
 JEZ R7, R0
 DEC R1, R1
 LWI R7, 0x000f
 AND R1, R1, R7
+enter_pressed_down:
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 7
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
+LWI R7, pakcet_recevied
+JEZ R7, R0
+LWI R6, 63115
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R6, 63115
+LWD R7, R6
+INC R7, R7
+LWD R1, R7
+SWD R6, R7
+
 pakcet_recevied:
 LWI R6, 63115
 LWD R7, R6
@@ -1036,12 +1009,6 @@ SWD R6, R7
 
 LWI R7, 65516
 LWI R6, 0x0100
-LWD R5, R7
-ORR R5, R5, R6
-SWD R7, R5
-
-LWI R7, 65516
-LWI R6, 0x0200
 LWD R5, R7
 ORR R5, R5, R6
 SWD R7, R5

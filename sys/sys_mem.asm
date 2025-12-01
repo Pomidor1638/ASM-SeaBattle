@@ -52,11 +52,18 @@
 #endmacro
 
 // IMM
-#macro ALLOC_LOCAL words
+#macro ALLOC_LOCAL_IMM words
     LWI R5, words
     LWI R6, SP_PTR
     LWD R7, R6
     SUB R7, R7, R5
+    SWD R6, R7
+#endmacro
+// REG
+#macro ALLOC_LOCAL_REG reg
+    LWI R6, SP_PTR
+    LWD R7, R6
+    SUB R7, R7, reg
     SWD R6, R7
 #endmacro
 

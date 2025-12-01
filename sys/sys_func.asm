@@ -25,14 +25,13 @@
 // 
 #define FUNC_VARS_OFFSET 3
 
-#macro FUNCTION _func_macro_name_, _func_macro_local_words_
+__std_function_prologue:
 
-_func_macro_name_:
-    
+
     LWI R7, RETURN_BUF_PTR
     SWD R7, R6
 
-    ALLOC_LOCAL _func_macro_local_words_
+    ALLOC_LOCAL_REG R3
 
     LWI R7, PREV_SP_BUF_PTR
     LWD R5, R7
@@ -42,9 +41,9 @@ _func_macro_name_:
     LWD R5, R7
     PUSH R5
 
-#endmacro
+    JPR R4
 
-#macro RETURN
+__std_function_epilogue:
 
     POP R4 // RETURN ADDRESS
     POP R5 // PREVIOS SP
@@ -52,6 +51,20 @@ _func_macro_name_:
     LWI R3, SP_PTR
     SWD R3, R5
     JPR R4
+
+#macro FUNCTION _func_macro_name_, _func_macro_local_words_
+
+_func_macro_name_:
+    
+    LWI R3, _func_macro_local_words_
+    LWI R7, __std_function_prologue
+    JRL R4, R7
+
+#endmacro
+
+#macro RETURN
+
+    JMP __std_function_epilogue
 
 #endmacro
 
@@ -103,9 +116,8 @@ _func_macro_name_:
 // !!!!!!!! functions return's value contains only in R0                      !!!!!!!!
 // !!!!!!!! DO NOT USE RETURN IN FUNC BLOCK, use <_func_name_> return instead !!!!!!!!
 //
-// it's possible use args from registers [R0, ... , R4]
-// they don't distorts
-// !!!!!!!! BUT USE IT VERY CAREFULL !!!!!!!!
+// it's possible to load args from regs [R0, R1, R2]
+// !!!!!!!! USE VERY CAREFULL !!!!!!!!
 //
 
 #endif
