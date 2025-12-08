@@ -41,6 +41,68 @@ ENDFUNCTION
 	CALL _Video_Clear
 #endmacro
 
+FUNCTION _Video_PutChar, 0
+
+	#define _Video_PutChar_localarg_reg_x    3
+	#define _Video_PutChar_localarg_reg_y    4
+	#define _Video_PutChar_localarg_reg_char 5
+	#define _Video_PutChar_localarg_reg_fg   6
+	#define _Video_PutChar_localarg_reg_bg   7 
+
+	LOAD_SP R6
+
+	LOAD_OFFSET_IMM_REG R0, _Video_PutChar_localarg_reg_x   , R6
+	LOAD_OFFSET_IMM_REG R1, _Video_PutChar_localarg_reg_y   , R6
+	LOAD_OFFSET_IMM_REG R2, _Video_PutChar_localarg_reg_char, R6
+	LOAD_OFFSET_IMM_REG R3, _Video_PutChar_localarg_reg_fg  , R6
+	LOAD_OFFSET_IMM_REG R4, _Video_PutChar_localarg_reg_bg  , R6
+
+	LWI R7, globalvar_width
+	UML R1, R1, R7
+	ADD R1, R1, R0
+	
+
+	LWI R6, VRAM_SIZE
+	LWI R7, _Video_PutChar_put
+
+	JPL R7, R1, R6
+	RETURN
+
+_Video_PutChar_put:
+
+	ADD R1, R1, R6 
+
+	// R1 - VRAM_ADDR
+
+	LWI R7, 0xf
+	AND R3, R3, R7
+	AND R4, R4, R7
+
+	LWI R7, 12
+	SLL R3, R3, R7
+
+	LWI R7, 8
+	SLL R3, R4, R7
+
+	ADD R0, R3, R4
+	ADD R0, R0, R2
+	
+	LWD R1, R0
+
+_Video_PutChar_return:
+ENDFUNCTION
+
+#macro Video_PutChar reg_x, reg_y, reg_char, reg_fg, reg_bg
+	PUSH_PREV_SP
+
+	PUSH reg_bg
+	PUSH reg_fg
+	PUSH reg_char
+	PUSH reg_y
+	PUSH reg_x
+
+	CALL _Video_PutChar
+#endmacro
 
 FUNCTION _Video_Print, 0
 
@@ -160,18 +222,61 @@ ENDFUNCTION
 #endmacro
 
 
+FUNCTION _Video_PrintCentered, 0
+
+#define _Video_PrintCentered_localarg_reg_str      3
+#define _Video_PrintCentered_localarg_reg_y        4
+#define _Video_PrintCentered_localarg_reg_fg_color 5
+#define _Video_PrintCentered_localarg_reg_bg_color 6
+
+	LOAD_SP R6
+	LOAD_OFFSET_IMM_REG R0, _Video_PrintCentered_localarg_reg_str     , R6
+	
+	strlen R0
+
+	LWI R7, 1
+	LWI R6, globalvar_width
+
+	SUB R0, R6, R0
+	SRL R0, R0, R7
+
+	LOAD_SP R6
+	LOAD_OFFSET_IMM_REG R1, _Video_PrintCentered_localarg_reg_str     , R6
+	LOAD_OFFSET_IMM_REG R2, _Video_PrintCentered_localarg_reg_y       , R6
+	LOAD_OFFSET_IMM_REG R3, _Video_PrintCentered_localarg_reg_fg_color, R6
+	LOAD_OFFSET_IMM_REG R4, _Video_PrintCentered_localarg_reg_bg_color, R6
+
+	Video_Print R1, R0, R2, R3, R4
+
+_Video_PrintCentered_return:
+ENDFUNCTION
+
+#macro Video_PrintCentered reg_str, reg_y, reg_fg_color, reg_bg_color
+
+	PUSH_PREV_SP
+
+	PUSH reg_bg_color
+	PUSH reg_fg_color
+	PUSH reg_y
+	PUSH reg_str
+
+	CALL _Video_PrintCentered
+#endmacro
+
+
 #macro Video_Present
 	memcpy BUF_VRAM_BASE_ADDR, VRAM_SIZE, VRAM_BASE_ADDR
 #endmacro
 
 #macro Video_Init
-	PUSH_PREV_SP
-	CALL _Video_Init
+	//PUSH_PREV_SP
+	//CALL _Video_Init
 #endmacro
 
-#macro Video_ChooseMode
-	PUSH_PREV_SP
-	CALL _Video_ChooseMode
-#endmacro
+
+#include "video_choosemode.asm"
+#include "video_wait_for_connection.asm"
+#include "video_placingships.asm"
+
 
 #endif

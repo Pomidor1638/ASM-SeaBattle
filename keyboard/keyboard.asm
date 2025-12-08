@@ -289,5 +289,8 @@ ENDFUNCTION
 #endmacro
 
 
+#macro Input_Init
+#endmacro
+
 
 #endif

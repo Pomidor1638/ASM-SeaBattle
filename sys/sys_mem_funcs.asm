@@ -39,7 +39,41 @@ ENDFUNCTION
     LWI R2, imm_ptr_dst
 
     CALL _memcpy
-_memcpy_end:
+#endmacro
+
+FUNCTION _memset, 0
+
+#define _memset_dst  3
+#define _memset_data 4
+#define _memset_size 5
+    LOAD_SP R6
+    LWI R7, _memset_dst
+    ADD R7, R6, R7
+    // R7 = 3 + SP
+    LWD R0, R7
+    INC R7, R7
+    // R7 = 4 + SP
+    LWD R1, R7
+    INC R7, R7
+    // R7 = 5 + SP
+    LWD R2, R7
+    
+    LWI R7, _memset_return
+
+_memset_loop:
+    JEZ R7, R2
+    SWD R0, R1
+    DEC R2, R2
+    JMP _memset_loop
+_memset_return:
+ENDFUNCTION
+
+#macro memset reg_dst, reg_data, reg_size 
+    PUSH_PREV_SP 
+    PUSH reg_size
+    PUSH reg_data
+    PUSH reg_dst
+    CALL _memset
 #endmacro
 
 #endif

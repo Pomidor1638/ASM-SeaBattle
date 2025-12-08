@@ -27,7 +27,6 @@
 
 __std_function_prologue:
 
-
     LWI R7, RETURN_BUF_PTR
     SWD R7, R6
 

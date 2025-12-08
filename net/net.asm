@@ -4,9 +4,9 @@
 
 #include "../sys/sys.asm"
 
-#define NET_CTRL_CELL   65516 // NET_BASE_ADDR
-#define NET_RECV_PACKET 65517 // NET_BASE_ADDR + 1
-#define NET_SEND_PACKET 65525 // NET_BASE_ADDR + 9
+#define NET_CTRL_CELL       0 // NET_BASE_ADDR
+#define NET_RECV_PACKET     1 // NET_BASE_ADDR + 1
+#define NET_SEND_PACKET     9 // NET_BASE_ADDR + 9
 
 #define NET_PACKET_TYPE_OFFSET 0
 
