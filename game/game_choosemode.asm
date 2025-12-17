@@ -40,7 +40,6 @@ _Game_ChooseMode_check_down_pressed:
     JMP _Game_ChooseMode_check_enter_pressed
 
 _Game_ChooseMode_check_enter_pressed:
-
     Input_IsKeyJustPressed globalvar_keystate_offset_return
     LWI R7, _Game_ChooseMode_draw
     JEZ R7, R0
@@ -50,7 +49,6 @@ _Game_ChooseMode_check_enter_pressed:
 
 _Game_ChooseMode_draw:
     Video_ChooseMode
-    Video_Present
 _Game_ChooseMode_return:
 ENDFUNCTION
 

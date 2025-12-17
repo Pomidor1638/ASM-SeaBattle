@@ -7,7 +7,7 @@
 // VERY IMPORTANT!!!!
 // THIS FUNCTION USE ARGS FROM REGISTERS DIRECTLY
 FUNCTION _memcpy, 0
-
+    
 	// R0 - src
 	// R1 - size
 	// R2 - dst
@@ -43,11 +43,11 @@ ENDFUNCTION
 
 FUNCTION _memset, 0
 
-#define _memset_dst  3
-#define _memset_data 4
-#define _memset_size 5
+#define _memset_localarg_dst  3
+#define _memset_localarg_data 4
+#define _memset_localarg_size 5
     LOAD_SP R6
-    LWI R7, _memset_dst
+    LWI R7, _memset_localarg_dst
     ADD R7, R6, R7
     // R7 = 3 + SP
     LWD R0, R7
@@ -63,6 +63,7 @@ FUNCTION _memset, 0
 _memset_loop:
     JEZ R7, R2
     SWD R0, R1
+    INC R0, R0
     DEC R2, R2
     JMP _memset_loop
 _memset_return:

@@ -4,7 +4,7 @@
 
 
 START:
-    STACK_INIT
+    SYS_INIT
     Game_Init
     JMP forever_loop
 

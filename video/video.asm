@@ -41,6 +41,23 @@ ENDFUNCTION
 	CALL _Video_Clear
 #endmacro
 
+#macro Video_PutSymbol reg_x, reg_y, reg_sym, reg_fg, reg_bg
+
+	LWI R7, 40
+	MUL R6, reg_y, R7
+	ADD reg_x, R6, reg_x
+
+	LWI R7, 12
+	SLL R6, reg_fg, R7
+	ORR reg_sym, reg_sym, R6
+	LWI R7, 8
+	SLL R6, reg_bg, R7
+	ORR reg_sym, reg_sym, R6
+
+	SWD reg_x, reg_sym
+
+#endmacro
+
 FUNCTION _Video_PutChar, 0
 
 	#define _Video_PutChar_localarg_reg_x    3
@@ -61,18 +78,17 @@ FUNCTION _Video_PutChar, 0
 	UML R1, R1, R7
 	ADD R1, R1, R0
 	
-
 	LWI R6, VRAM_SIZE
 	LWI R7, _Video_PutChar_put
 
 	JPL R7, R1, R6
 	RETURN
-
 _Video_PutChar_put:
 
+	LWI R6, BUF_VRAM_BASE_ADDR
 	ADD R1, R1, R6 
 
-	// R1 - VRAM_ADDR
+	// R1 - buf_vram_addr
 
 	LWI R7, 0xf
 	AND R3, R3, R7
@@ -82,12 +98,12 @@ _Video_PutChar_put:
 	SLL R3, R3, R7
 
 	LWI R7, 8
-	SLL R3, R4, R7
+	SLL R4, R4, R7
 
-	ADD R0, R3, R4
-	ADD R0, R0, R2
+	ORR R0, R3, R4
+	ORR R0, R0, R2
 	
-	LWD R1, R0
+	SWD R1, R0
 
 _Video_PutChar_return:
 ENDFUNCTION
@@ -263,6 +279,39 @@ ENDFUNCTION
 	CALL _Video_PrintCentered
 #endmacro
 
+_Video_DrawWaitRemote_server_str:
+	.string "Waiting for Server"
+_Video_DrawWaitRemote_client_str:
+	.string "Waiting for Client"
+
+FUNCTION _Video_DrawWaitRemote, 0
+
+	LOAD_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
+	
+	LWI R1, 1
+	LWI R2, 7
+	LWI R3, 0
+
+	LWI R7, _Video_DrawWaitRemote_draw_client
+	JEZ R7, R0
+
+	LWI R0, _Video_DrawWaitRemote_client_str
+
+	JMP _Video_DrawWaitRemote_print
+
+_Video_DrawWaitRemote_draw_client:
+
+	LWI R0, _Video_DrawWaitRemote_server_str
+
+_Video_DrawWaitRemote_print:
+	Video_Print R0, R1, R1, R2, R3
+
+ENDFUNCTION
+
+#macro Video_DrawWaitRemote
+	PUSH_PREV_SP
+	CALL _Video_DrawWaitRemote
+#endmacro
 
 #macro Video_Present
 	memcpy BUF_VRAM_BASE_ADDR, VRAM_SIZE, VRAM_BASE_ADDR

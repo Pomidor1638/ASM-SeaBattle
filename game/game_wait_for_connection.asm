@@ -66,6 +66,8 @@ _Game_WaitForConnection_send_connection_request:
 
     JNZ R2, R0
 
+    NOP
+
     LWI R0, 32
     STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
     
@@ -75,7 +77,6 @@ _Game_WaitForConnection_send_connection_request:
 
 _Game_WaitForConnection_draw:
     Video_WaitForConnection
-    Video_Present
 ENDFUNCTION
 
 #macro Game_WaitForConnection

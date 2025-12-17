@@ -8,33 +8,93 @@
 #include "../keyboard/keyboard.asm"
 #include "../net/net.asm"
 
-FUNCTION _UpdateWaitRemote, 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_UpdateWaitRemote, 0
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_wait_remote, RAM_BASE_ADDR
-    LWI R7, _UpdateWaitRemote_return
+    LWI R7, _Game_UpdateWaitRemote_return
     JEZ R7, R0
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
-    LWI R7, _UpdateWaitRemote_return
+    LWI R7, _Game_UpdateWaitRemote_return
     JNZ R7, R0
 
-_UpdateWaitRemote_remote_waiting_attemps_else:
+    LOAD_OFFSET_IMM_IMM R0, globalvar_remote_waiting_attemps, RAM_BASE_ADDR
+    LWI R7, _Game_UpdateWaitRemote_remote_waiting_send_packet
+    JNZ R7, R0
 
-    
+    LWI R0, PACKET_REMOTE_ERROR
+    STORE_OFFSET_IMM_IMM R0, NET_SEND_PACKET, NET_BASE_ADDR
+    NET_SendPacket
+    LWI R0, STATE_ERROR
+    STORE_OFFSET_IMM_IMM R0, globalvar_game_state, RAM_BASE_ADDR 
 
-_UpdateWaitRemote_return:
+    LWI R0, 0xffff
+    RETURN
+
+_Game_UpdateWaitRemote_remote_waiting_send_packet:
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_remote_waiting_attemps, RAM_BASE_ADDR
+    DEC R0, R0
+    SWD R7, R0
+
+    LWI R0, 100
+    STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
+    NET_SendPacket    
+
+_Game_UpdateWaitRemote_return:
+    LWI R0, 0x0000
 ENDFUNCTION
 
-#macro UpdateWaitRemote
+#macro Game_UpdateWaitRemote
     PUSH_PREV_SP
-    CALL _UpdateWaitRemote
+    CALL _Game_UpdateWaitRemote
 #endmacro 
 
-FUNCTION _HandleCursorMovement, 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_HandleCursorMovement, 0
 
     Input_IsKeyJustPressed globalvar_keystate_offset_up
 
-    LWI R5, _HandleCursorMovement_pressed_down
+    LWI R5, _Game_HandleCursorMovement_pressed_down
     JEZ R5, R0
 
     LOAD_OFFSET_IMM_IMM R1, globalvar_my_cursor_y, RAM_BASE_ADDR
@@ -44,24 +104,24 @@ FUNCTION _HandleCursorMovement, 0
     
     SWD R7, R1
 
-_HandleCursorMovement_pressed_down:
+_Game_HandleCursorMovement_pressed_down:
 
     Input_IsKeyJustPressed globalvar_keystate_offset_down
 
-    LWI R5, _HandleCursorMovement_pressed_left
+    LWI R5, _Game_HandleCursorMovement_pressed_left
     JEZ R5, R0
 
     LOAD_OFFSET_IMM_IMM R1, globalvar_my_cursor_y, RAM_BASE_ADDR
-    LWI R2, 9 // HEIGHT - 1
+    LWI R2, 9 // FIELD_SIZE - 1
     JEQ R5, R1, R2
     INC R1, R1
     SWD R7, R1
 
-_HandleCursorMovement_pressed_left:
+_Game_HandleCursorMovement_pressed_left:
 
     Input_IsKeyJustPressed globalvar_keystate_offset_left
 
-    LWI R5, _HandleCursorMovement_pressed_right
+    LWI R5, _Game_HandleCursorMovement_pressed_right
     JEZ R5, R0
 
     LOAD_OFFSET_IMM_IMM R1, globalvar_my_cursor_x, RAM_BASE_ADDR
@@ -71,42 +131,105 @@ _HandleCursorMovement_pressed_left:
     
     SWD R7, R1
 
-_HandleCursorMovement_pressed_right:
+_Game_HandleCursorMovement_pressed_right:
 
     Input_IsKeyJustPressed globalvar_keystate_offset_right
 
-    LWI R5, _HandleCursorMovement_pressed_r
+    LWI R5, _Game_HandleCursorMovement_return
     JEZ R5, R0
 
     LOAD_OFFSET_IMM_IMM R1, globalvar_my_cursor_x, RAM_BASE_ADDR
-    LWI R2, 9 // HEIGHT - 1
+    LWI R2, 9 // FIELD_SIZE - 1
     JEQ R5, R1, R2
     INC R1, R1
     SWD R7, R1
 
-_HandleCursorMovement_pressed_r:
-
-    Input_IsKeyJustPressed globalvar_keystate_offset_r
-
-    LWI R5, _HandleCursorMovement_return
-    JEZ R5, R0
-
-    LWI R7, RAM_BASE_ADDR
-    LWI R6, globalvar_ship_placement_state
-    ADD R6, R6, R7
-    LWI R7, cur_ship_state_t_horizontal_offset
-    ADD R6, R6, R7
-
-    LWD R1, R6
-    NOT R1, R1
-    SWD R6, R1
-
-_HandleCursorMovement_return:
+_Game_HandleCursorMovement_return:
 ENDFUNCTION
 
-#macro HandleCursorMovement
-    PUSH_PREV_SP 
-    CALL _HandleCursorMovement
+#macro Game_HandleCursorMovement
+    PUSH_PREV_SP
+    CALL _Game_HandleCursorMovement
+#endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_StartWaitRemote, 0
+
+    LWI R0, 0xffff
+    STORE_OFFSET_IMM_IMM R0, globalvar_wait_remote, RAM_BASE_ADDR
+
+    LWI R0, 5
+    STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_attemps, RAM_BASE_ADDR
+
+    LWI R0, 100
+    STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
+
+    
+
+ENDFUNCTION
+
+#macro Game_StartWaitRemote
+    PUSH_PREV_SP
+    CALL _Game_StartWaitRemote
+#endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_EndWaitRemote, 0
+
+    LWI R0, 0
+    STORE_OFFSET_IMM_IMM R0, globalvar_wait_remote, RAM_BASE_ADDR
+
+    LWI R0, 0
+    STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_attemps, RAM_BASE_ADDR
+
+    LWI R0, 0
+    STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
+
+ENDFUNCTION
+
+#macro Game_EndWaitRemote
+    PUSH_PREV_SP
+    CALL _Game_EndWaitRemote
 #endmacro
 
 #include "game_choosemode.asm"
@@ -114,15 +237,57 @@ ENDFUNCTION
 #include "game_update_counters.asm"
 #include "game_placingships.asm"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #macro Game_Init
 
-    LWI R0, 0
+    LWI R0, 0xffff
     STORE_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
 
-    LWI R0, STATE_PLACING_SHIPS
+    LWI R0, STATE_PLACING_SHIPS //STATE_CHOOSE_MODE
     STORE_OFFSET_IMM_IMM R0, globalvar_game_state , RAM_BASE_ADDR
 
 #endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FUNCTION _Game_Tick, 0
 
@@ -135,25 +300,26 @@ FUNCTION _Game_Tick, 0
     LWI R6, STATE_CHOOSE_MODE
     JNQ R7, R0, R6
     Game_ChooseMode
-    RETURN
+    JMP _Game_Tick_return
 
 _Game_Tick_wait_for_connection:
     LWI R7, _Game_Tick_placing_ships
     LWI R6, STATE_WAIT_FOR_CONNECTION
     JNQ R7, R0, R6
     Game_WaitForConnection
-    RETURN
+    JMP _Game_Tick_return
 
 _Game_Tick_placing_ships:
     LWI R7, _Game_Tick_return
     LWI R6, STATE_PLACING_SHIPS
     JNQ R7, R0, R6
     Game_PlacingShips
-    RETURN
+    JMP _Game_Tick_return
 
 
 
 _Game_Tick_return:
+    Video_Present
 ENDFUNCTION
 
 #macro Game_Tick

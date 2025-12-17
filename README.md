@@ -154,7 +154,7 @@ Memory access is synchronized via a hold signal for slow memory.
 ## 7\. Example Program
 
 ```
-    LWI R1, 0x1234
+    LWI R1, 0x1234 
     ADD R2, R1, R1
     JEZ R3, R2
     LWD R4, R3

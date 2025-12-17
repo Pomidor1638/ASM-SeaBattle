@@ -43,6 +43,8 @@
 #define SUNK_SYMBOL              114
 #define SHIP_PLACING_FRONT_COLOR   1
 #define SHIP_BACK_COLOR           10
+#define CHAR_OVER_WALL_COLOR       1
+#define FIELD_WALL_COLOR          14
  
 // Cell states
 #define CELL_EMPTY     0
@@ -164,9 +166,9 @@
 #define globalvar_ship_placement_state 284 // sizeof == 4
 
 globalvar_SHIP_SIZES_AND_COUNT:
-    .data32 4, 1
-    .data32 3, 2
-    .data32 2, 3
-    .data32 1, 4
+    .data16 4, 1
+    .data16 3, 2
+    .data16 2, 3
+    .data16 1, 4
 
 #endif

@@ -68,6 +68,7 @@
 	SWD R7, reg_src
 #endmacro
 
+
 #macro LOAD_OFFSET_REG_REG reg_dst, reg_offset, reg_base
 	ADD R7, reg_base, reg_offset
 	LWD reg_dst, R7
@@ -78,19 +79,79 @@
 	SWD R7, reg_src
 #endmacro
 
-// IMM
-#macro ALLOC_LOCAL_IMM words
-    LWI R5, words
+#macro LOAD_OFFSET_STRUCT_IMM_IMM reg_dst, imm_struct_ptr, imm_struct_offset, imm_base
+	LWI R7, imm_base
+	LWI R6, imm_struct_ptr
+	ADD R7, R6, R7
+	LWI R6, imm_struct_offset
+	ADD R7, R6, R7
+	LWD reg_dst, R7
+#endmacro
+
+#macro STORE_OFFSET_STRUCT_IMM_IMM reg_src, imm_struct_ptr, imm_struct_offset, imm_base
+	LWI R7, imm_base
+	LWI R6, imm_struct_ptr
+	ADD R7, R6, R7
+	LWI R6, imm_struct_offset
+	ADD R7, R6, R7
+	SWD R7, reg_src
+#endmacro
+
+#macro OFFSET_STRUCT_IMM_IMM reg_dst, imm_struct_ptr, imm_struct_offset, imm_base, buf_reg
+	LWI R7, imm_base
+	LWI buf_reg, imm_struct_ptr
+	ADD R7, buf_reg, R7
+	LWI buf_reg, imm_struct_offset
+	ADD R7, buf_reg, R7
+	MOV reg_dst, R7
+#endmacro
+
+#macro OFFSET_STRUCT_REG_IMM reg_dst, reg_struct_ptr, imm_struct_offset
+	LWI R7, imm_struct_offset
+	ADD R7, reg_struct_ptr, R7
+	MOV reg_dst, R7
+#endmacro
+
+#macro OFFSET_IMM_REG reg_dst, imm_offset, reg_base
+	LWI R7, imm_offset
+	ADD R7, reg_base, R7
+	MOV reg_dst, R7
+#endmacro
+
+#macro OFFSET_IMM_IMM reg_dst, imm_offset, imm_base
+	LWI R7, imm_base
+	LWI R6, imm_offset
+	ADD R7, R7, R6
+	MOV reg_dst, R7
+#endmacro
+
+#macro ARRAY_INDEX_REG_REG reg_dst, reg_base, reg_index, imm_sizeof
+	LWI R7, imm_sizeof
+	MUL R7, R7, reg_index
+	ADD R7, reg_base, R7
+	MOV reg_dst, R7
+#endmacro
+
+#macro ARRAY_INDEX_IMM_REG reg_dst, imm_base, reg_index, imm_sizeof, buf_reg
+	LWI R7, imm_sizeof
+	LWI buf_reg, imm_base
+	MUL R7, R7, reg_index
+	ADD R7, buf_reg, R7
+	MOV reg_dst, R7
+#endmacro
+
+#macro ALLOC_LOCAL_IMM imm_words
+    LWI R5, imm_words
     LWI R6, SP_PTR
     LWD R7, R6
     SUB R7, R7, R5
     SWD R6, R7
 #endmacro
-// REG
-#macro ALLOC_LOCAL_REG reg
+
+#macro ALLOC_LOCAL_REG reg_words
     LWI R6, SP_PTR
     LWD R7, R6
-    SUB R7, R7, reg
+    SUB R7, R7, reg_words
     SWD R6, R7
 #endmacro
 

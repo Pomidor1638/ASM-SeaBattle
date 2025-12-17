@@ -56,7 +56,7 @@ _Game_UpdateCounters_cursor_blink_counter:
     JMP _Game_UpdateCounters_remote_waiting_counter
 
 _Game_UpdateCounters_cursor_blink_counter_else:
-    LWI R0, 5
+    LWI R0, 5 // blink speed
     STORE_OFFSET_IMM_IMM R0, globalvar_cursor_blink_counter, RAM_BASE_ADDR
     LOAD_OFFSET_IMM_IMM R0, globalvar_cursor_visible, RAM_BASE_ADDR
     NOT R0, R0
