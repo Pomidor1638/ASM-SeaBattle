@@ -236,6 +236,7 @@ ENDFUNCTION
 #include "game_wait_for_connection.asm"
 #include "game_update_counters.asm"
 #include "game_placingships.asm"
+#include "game_maingame.asm"
 
 
 
@@ -259,10 +260,10 @@ ENDFUNCTION
 
 #macro Game_Init
 
-    LWI R0, 0xffff
+    LWI R0, 0x0000
     STORE_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
 
-    LWI R0, STATE_PLACING_SHIPS //STATE_CHOOSE_MODE
+    LWI R0, STATE_CHOOSE_MODE
     STORE_OFFSET_IMM_IMM R0, globalvar_game_state , RAM_BASE_ADDR
 
 #endmacro
@@ -310,12 +311,18 @@ _Game_Tick_wait_for_connection:
     JMP _Game_Tick_return
 
 _Game_Tick_placing_ships:
-    LWI R7, _Game_Tick_return
+    LWI R7, _Game_Tick_main_game
     LWI R6, STATE_PLACING_SHIPS
     JNQ R7, R0, R6
     Game_PlacingShips
     JMP _Game_Tick_return
 
+_Game_Tick_main_game:
+    LWI R7, _Game_Tick_return
+    LWI R6, STATE_MAIN_GAME
+    JNQ R7, R0, R6
+    Game_MainGame
+    JMP _Game_Tick_return
 
 
 _Game_Tick_return:

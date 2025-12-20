@@ -218,6 +218,9 @@ _Video_DrawField_cell_ship:
     LWI R7, _Video_DrawField_cell_miss
     JNQ R7, R2, R3
 
+    LWI R3, WATER_SYMBOL
+    LWI R4, WATER_FRONT_COLOR
+
     LOAD_OFFSET_IMM_REG R5, _Video_DrawField_localarg_draw_ships, R6
     LWI R7, _Video_DrawField_put_symbol
     JEZ R7, R5

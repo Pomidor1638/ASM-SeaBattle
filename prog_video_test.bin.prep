@@ -615,11 +615,21 @@ JMP __std_function_epilogue
 
 
 
+
+
+
+
+
 globalvar_SHIP_SIZES_AND_COUNT:
 .data16 4, 1
 .data16 3, 2
 .data16 2, 3
 .data16 1, 4
+
+
+
+
+
 
 
 
@@ -2237,6 +2247,8 @@ _Video_DrawField_cell_ship:
 LWI R3, 1
 LWI R7, _Video_DrawField_cell_miss
 JNQ R7, R2, R3
+LWI R3, 0
+LWI R4, 0
 LWI R7, 13
 ADD R7, R6, R7
 LWD R5, R7
@@ -2817,7 +2829,7 @@ LWI R7, _Video_PlacingShips_draw_bad_placement
 JGQ R7, R0, R6
 _Video_PlacingShips_draw_ship:
 LWI R7, 32768
-LWI R6, 280
+LWI R6, 535
 ADD R7, R7, R6
 LWD R0, R7
 
@@ -2825,14 +2837,14 @@ LWI R7, 14
 ADD R0, R0, R7
 INC R0, R0
 LWI R7, 32768
-LWI R6, 281
+LWI R6, 536
 ADD R7, R7, R6
 LWD R1, R7
 
 LWI R7, 9
 ADD R1, R1, R7
 INC R1, R1
-LWI R6, 284
+LWI R6, 539
 LWI R7, 32768
 ADD R6, R6, R7
 LWI R7, 2
@@ -3050,6 +3062,448 @@ JRL R6, R7
 
 _Video_PlacingShips_return:
 JMP __std_function_epilogue
+
+
+
+
+
+
+
+
+
+_Video_DrawFields:
+LWI R3, 2
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+
+
+
+
+
+
+
+
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 7
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 5
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 6
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, _Video_DrawFields_not_my_turn
+JEZ R7, R2
+LWI R2, 22
+LWI R3, 9
+JMP _Video_DrawFields_draw_fields
+_Video_DrawFields_not_my_turn:
+LWI R2, 6
+LWI R3, 9
+_Video_DrawFields_draw_fields:
+INC R2, R2
+INC R3, R3
+ADD R0, R0, R2
+ADD R1, R1, R3
+LWI R7, 3
+ADD R7, R6, R7
+SWD R7, R0
+
+LWI R7, 4
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R0, 6
+LWI R1, 9
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R2, R7
+
+LWI R7, 4
+ADD R7, R2, R7
+MOV R2, R7
+
+LWI R3, 0xFFFF
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_DrawField
+JRL R6, R7
+
+LWI R0, 22
+LWI R1, 9
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+MOV R2, R7
+
+LWI R7, 4
+ADD R7, R2, R7
+MOV R2, R7
+
+LWI R3, 0x0000
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_DrawField
+JRL R6, R7
+
+LWI R7, 32768
+LWI R6, 12
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Video_DrawFields_return
+JEZ R7, R0
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R2, 11
+LWI R7, 7
+ADD R7, R6, R7
+LWD R3, R7
+
+LWI R7, _Video_DrawFields_enemy_cursor
+JEZ R7, R3
+LWI R3, 2
+JMP _Video_DrawFields_draw_cursor
+_Video_DrawFields_enemy_cursor:
+LWI R3, 1
+_Video_DrawFields_draw_cursor:
+LWI R4, 10
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R4
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_PutChar
+JRL R6, R7
+
+_Video_DrawFields_return:
+JMP __std_function_epilogue
+
+
+
+
+
+
+
+
+_Video_DrawMyTurn_arrow_str:
+.string "->"
+_Video_DrawMyTurn_your_turn_str:
+.string "YOUR TURN"
+_Video_DrawMyTurn:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 32768
+LWI R6, 535
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, 32768
+LWI R6, 536
+ADD R7, R7, R6
+LWD R1, R7
+
+LWI R2, 0xFFFF
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_DrawFields
+JRL R6, R7
+
+LWI R0, _Video_DrawMyTurn_arrow_str
+LWI R1, 19
+LWI R2, 15
+LWI R3, 7
+LWI R4, 0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R4
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Print
+JRL R6, R7
+
+LWI R0, _Video_DrawMyTurn_your_turn_str
+LWI R1, 6
+LWI R2, 7
+LWI R3, 0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_PrintCentered
+JRL R6, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
+_Video_DrawEnemyTurn_arrow_str:
+.string "<-"
+_Video_DrawEnemyTurn_enemy_turn_str:
+.string "ENEMY'S TURN"
+_Video_DrawEnemyTurn:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+LWD R1, R7
+
+LWI R2, 0x0000
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_DrawFields
+JRL R6, R7
+
+LWI R0, _Video_DrawEnemyTurn_arrow_str
+LWI R1, 19
+LWI R2, 15
+LWI R3, 7
+LWI R4, 0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R4
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Print
+JRL R6, R7
+
+LWI R0, _Video_DrawEnemyTurn_enemy_turn_str
+LWI R1, 6
+LWI R2, 1
+LWI R3, 0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_PrintCentered
+JRL R6, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
 
 
 
@@ -3502,7 +3956,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleCursorMovement_pressed_down
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 281
+LWI R6, 536
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -3523,7 +3977,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleCursorMovement_pressed_left
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 281
+LWI R6, 536
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -3545,7 +3999,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleCursorMovement_pressed_right
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 280
+LWI R6, 535
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -3566,7 +4020,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleCursorMovement_return
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 280
+LWI R6, 535
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -3852,7 +4306,6 @@ ADD R7, R7, R6
 LWD R0, R7
 
 JNZ R2, R0
-NOP
 LWI R0, 32
 LWI R7, 32768
 LWI R6, 14
@@ -4254,16 +4707,16 @@ LWI R7, __std_function_prologue
 JRL R4, R7
 
 LWI R7, 32768
-LWI R6, 280
+LWI R6, 535
 ADD R7, R7, R6
 LWD R0, R7
 
 LWI R7, 32768
-LWI R6, 281
+LWI R6, 536
 ADD R7, R7, R6
 LWD R1, R7
 
-LWI R7, 284
+LWI R7, 539
 LWI R6, 32768
 ADD R7, R6, R7
 LWI R6, 0
@@ -4285,7 +4738,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleShipMovement_q_pressed
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 284
+LWI R6, 539
 ADD R6, R6, R7
 LWI R7, 3
 ADD R6, R6, R7
@@ -4306,7 +4759,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleShipMovement_e_pressed
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 284
+LWI R6, 539
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -4348,7 +4801,7 @@ AND R0, R2, R1
 LWI R5, _Game_HandleShipMovement_return
 JEZ R5, R0
 LWI R7, 32768
-LWI R6, 284
+LWI R6, 539
 ADD R7, R7, R6
 LWD R1, R7
 
@@ -4421,7 +4874,167 @@ ADD R7, R1, R7
 MOV R1, R7
 
 LWD R1, R1
-NOP
+LWI R7, 3
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 0
+ADD R7, R0, R7
+MOV R1, R7
+
+LWD R1, R1
+LWI R7, 4
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 1
+ADD R7, R0, R7
+MOV R1, R7
+
+LWD R1, R1
+LWI R7, 5
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 3
+ADD R7, R0, R7
+MOV R1, R7
+
+LWD R1, R1
+LWI R7, 6
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, _Game_CanPlaceShip_zero_horizontal
+JEZ R7, R1
+LWI R7, 4
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, _Game_CanPlaceShip_return_false
+ADD R0, R0, R2
+LWI R1, 10
+JPG R7, R0, R1
+JMP _Game_CanPlaceShip_i_loop_init
+_Game_CanPlaceShip_zero_horizontal:
+LWI R7, 5
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, _Game_CanPlaceShip_return_false
+ADD R0, R0, R2
+LWI R1, 10
+JPG R7, R0, R1
+_Game_CanPlaceShip_i_loop_init:
+LWI R0, -1
+LWI R7, 9
+ADD R7, R6, R7
+SWD R7, R0
+
+_Game_CanPlaceShip_i_loop:
+LWI R7, 9
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, _Game_CanPlaceShip_return_true
+JPG R7, R0, R1
+LWI R1, -1
+LWI R7, 10
+ADD R7, R6, R7
+SWD R7, R1
+
+_Game_CanPlaceShip_j_loop:
+LWI R7, 10
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R2, 1
+LWI R7, _Game_CanPlaceShip_i_loop_end
+JPG R7, R1, R2
+LWI R7, 4
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 5
+ADD R7, R6, R7
+LWD R3, R7
+
+LWI R7, 6
+ADD R7, R6, R7
+LWD R4, R7
+
+LWI R7, _Game_CanPlaceShip_j_loop_zero_horizontal
+JEZ R7, R4
+ADD R2, R2, R0
+ADD R3, R3, R1
+JMP _Game_CanPlaceShip_check_bounds
+_Game_CanPlaceShip_j_loop_zero_horizontal:
+ADD R2, R2, R1
+ADD R3, R3, R0
+_Game_CanPlaceShip_check_bounds:
+LWI R4, 0
+LWI R5, 10
+LWI R7, _Game_CanPlaceShip_j_loop_end
+JPL R7, R2, R4
+JPL R7, R3, R4
+JGQ R7, R2, R5
+JGQ R7, R3, R5
+LWI R7, 12
+ADD R7, R6, R7
+LWD R4, R7
+
+LWI R7, 4
+ADD R7, R4, R7
+MOV R4, R7
+
+LWI R7, 20
+MUL R7, R7, R3
+ADD R7, R4, R7
+MOV R4, R7
+
+LWI R7, 2
+MUL R7, R7, R2
+ADD R7, R4, R7
+MOV R4, R7
+
+LWI R7, 0
+ADD R7, R4, R7
+MOV R4, R7
+
+LWD R4, R4
+LWI R7, _Game_CanPlaceShip_return_false
+LWI R5, 1
+JEQ R7, R4, R5
+_Game_CanPlaceShip_j_loop_end:
+LWI R7, 10
+ADD R7, R6, R7
+LWD R1, R7
+
+INC R1, R1
+LWI R7, 10
+ADD R7, R6, R7
+SWD R7, R1
+
+JMP _Game_CanPlaceShip_j_loop
+_Game_CanPlaceShip_i_loop_end:
+LWI R7, 9
+ADD R7, R6, R7
+LWD R0, R7
+
+INC R0, R0
+LWI R7, 9
+ADD R7, R6, R7
+SWD R7, R0
+
+JMP _Game_CanPlaceShip_i_loop
 _Game_CanPlaceShip_return_true:
 LWI R0, 0xFFFF
 JMP __std_function_epilogue
@@ -4648,7 +5261,11 @@ LWI R7, 7
 ADD R7, R6, R7
 LWD R1, R7
 
-ADD R0, R0, R1
+LWI R7, 5
+MUL R7, R7, R0
+ADD R7, R1, R7
+MOV R0, R7
+
 LWI R7, 9
 ADD R7, R6, R7
 LWD R1, R7
@@ -4677,7 +5294,7 @@ LWI R7, 4
 ADD R7, R0, R7
 MOV R2, R7
 
-LWI R7, 4
+LWI R7, 3
 ADD R7, R1, R7
 MOV R3, R7
 
@@ -4687,7 +5304,7 @@ LWI R7, 2
 ADD R7, R0, R7
 MOV R2, R7
 
-LWI R7, 3
+LWI R7, 4
 ADD R7, R6, R7
 LWD R3, R7
 
@@ -4817,6 +5434,272 @@ LWI R3, 8
 LWI R7, __std_function_prologue
 JRL R4, R7
 
+
+
+
+
+
+
+
+
+
+
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 12
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 205
+ADD R7, R0, R7
+MOV R1, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 204
+ADD R7, R0, R7
+MOV R1, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 0
+ADD R7, R0, R7
+MOV R1, R7
+
+LWI R7, 5
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R0, R7
+
+LWD R1, R0
+LWI R7, _Game_RemoveShip_return
+JEZ R7, R1
+DEC R1, R1
+SWD R0, R1
+LWI R7, 3
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 5
+MUL R7, R7, R1
+ADD R7, R2, R7
+MOV R2, R7
+
+LWI R7, 10
+ADD R7, R6, R7
+SWD R7, R2
+
+LWI R7, 2
+ADD R7, R2, R7
+MOV R1, R7
+
+LWD R1, R1
+LWI R3, 4
+SUB R1, R3, R1
+LWI R7, 6
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, _Game_RemoveShip_not_in_bounds
+JLZ R7, R1
+JGQ R7, R1, R3
+JMP _Game_RemoveShip_in_bounds
+_Game_RemoveShip_not_in_bounds:
+LWI R7, 4
+ADD R7, R6, R7
+LWD R0, R7
+
+INC R0, R0
+LWI R7, 4
+ADD R7, R6, R7
+SWD R7, R0
+
+JMP _Game_RemoveShip_return
+_Game_RemoveShip_in_bounds:
+LWI R7, 5
+ADD R7, R6, R7
+LWD R2, R7
+
+ADD R2, R2, R1
+LWD R3, R2
+LWI R7, _Game_RemoveShip_thing_not_greater
+LWI R5, 0
+JLQ R7, R3, R5
+DEC R3, R3
+SWD R2, R3
+_Game_RemoveShip_thing_not_greater:
+LWI R7, 11
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 10
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, 2
+ADD R7, R0, R7
+MOV R2, R7
+
+LWI R7, 6
+ADD R7, R6, R7
+LWD R3, R7
+
+SWD R2, R3
+LWI R7, 3
+ADD R7, R0, R7
+MOV R2, R7
+
+LWI R7, 4
+ADD R7, R1, R7
+MOV R3, R7
+
+LWD R3, R3
+SWD R2, R3
+LWI R7, 0
+ADD R7, R0, R7
+MOV R2, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R3, R7
+
+LWD R3, R3
+SWD R2, R3
+LWI R7, 1
+ADD R7, R0, R7
+MOV R2, R7
+
+LWI R7, 1
+ADD R7, R1, R7
+MOV R3, R7
+
+LWD R3, R3
+SWD R2, R3
+LWI R7, 13
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, _Game_RemoveShip_not_link_cursor
+JEZ R7, R0
+LWI R7, 0
+ADD R7, R1, R7
+MOV R3, R7
+
+LWI R7, 1
+ADD R7, R1, R7
+MOV R4, R7
+
+LWD R3, R3
+LWD R4, R4
+LWI R7, 32768
+LWI R6, 535
+ADD R7, R7, R6
+SWD R7, R3
+
+LWI R7, 32768
+LWI R6, 536
+ADD R7, R7, R6
+SWD R7, R4
+
+_Game_RemoveShip_not_link_cursor:
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R3, R7
+
+LWI R7, 1
+ADD R7, R1, R7
+MOV R4, R7
+
+LWD R3, R3
+LWD R4, R4
+LWI R7, 7
+ADD R7, R6, R7
+SWD R7, R3
+
+LWI R7, 8
+ADD R7, R6, R7
+SWD R7, R4
+
+LWI R7, 10
+ADD R7, R6, R7
+LWD R5, R7
+
+LWI R7, 2
+ADD R7, R5, R7
+MOV R0, R7
+
+LWD R0, R0
+LWI R7, 4
+ADD R7, R5, R7
+MOV R5, R7
+
+LWD R5, R5
+LWI R7, _Game_RemoveShip_ship_not_horizontal
+JEZ R7, R5
+LWI R1, 2
+JMP _Game_RemoveShip_loop_init
+_Game_RemoveShip_ship_not_horizontal:
+LWI R1, 20
+_Game_RemoveShip_loop_init:
+LWI R7, 12
+ADD R7, R6, R7
+LWD R5, R7
+
+LWI R7, 4
+ADD R7, R5, R7
+MOV R5, R7
+
+LWI R7, 7
+ADD R7, R6, R7
+LWD R3, R7
+
+LWI R7, 8
+ADD R7, R6, R7
+LWD R4, R7
+
+LWI R7, 20
+MUL R7, R7, R4
+ADD R7, R5, R7
+MOV R5, R7
+
+LWI R7, 2
+MUL R7, R7, R3
+ADD R7, R5, R7
+MOV R5, R7
+
+LWI R7, 0
+ADD R7, R5, R7
+MOV R2, R7
+
+LWI R7, 1
+ADD R7, R5, R7
+MOV R3, R7
+
+LWI R4, -1
+LWI R5, 0
+LWI R6, 10
+LWI R7, _Game_RemoveShip_return
+_Game_RemoveShip_i_loop:
+JEZ R7, R0
+SWD R2, R5
+SWD R3, R4
+DEC R0, R0
+ADD R2, R2, R1
+ADD R3, R3, R1
+JMP _Game_RemoveShip_i_loop
+_Game_RemoveShip_return:
 JMP __std_function_epilogue
 
 
@@ -4892,7 +5775,7 @@ AND R0, R2, R1
 LWI R7, _Game_ServerHandlePlacement_pressed_return
 JEZ R7, R0
 LWI R7, 32768
-LWI R6, 284
+LWI R6, 539
 ADD R7, R7, R6
 MOV R0, R7
 
@@ -4977,7 +5860,7 @@ JRL R6, R7
 JMP _Game_ServerHandlePlacement_return
 _Game_ServerHandlePlacement_place_ship:
 LWI R7, 32768
-LWI R6, 284
+LWI R6, 539
 ADD R7, R7, R6
 MOV R0, R7
 
@@ -5025,10 +5908,274 @@ JMP __std_function_epilogue
 
 
 _Game_ServerHandleClientPlacement:
-LWI R3, 0
+LWI R3, 4
 LWI R7, __std_function_prologue
 JRL R4, R7
 
+
+LWI R7, 63111
+LWD R6, R7
+
+_Game_ServerHandleClientPlacement_check_loop:
+LWI R7, 65516
+LWD R0, R7
+
+LWI R7, _Game_ServerHandleClientPlacement_return
+JEZ R7, R0
+LWI R7, 65516
+LWI R6, 0x0100
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 65516
+LWI R6, 1
+ADD R7, R7, R6
+MOV R0, R7
+
+LWD R1, R0
+LWI R7, _Game_ServerHandleClientPlacement_check_remove_request
+LWI R6, 8
+JNQ R7, R1, R6
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+MOV R1, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R3, R7
+
+LWI R2, 1
+ADD R2, R0, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 1
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 2
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 3
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_PlaceShip
+JRL R6, R7
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R2, 9
+SWD R1, R2
+INC R1, R1
+SWD R1, R0
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_check_remove_request:
+LWI R7, _Game_ServerHandleClientPlacement_check_ready_request
+LWI R6, 10
+JNQ R7, R1, R6
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+MOV R1, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R3, R7
+
+LWI R2, 1
+ADD R2, R0, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 1
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 2
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 3
+ADD R7, R1, R7
+MOV R3, R7
+
+INC R2, R2
+LWD R4, R2
+SWD R3, R4
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R5, 0x0000
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_RemoveShip
+JRL R6, R7
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R2, 11
+SWD R1, R2
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_check_ready_request:
+LWI R7, _Game_ServerHandleClientPlacement_check_ready_response
+LWI R6, 2
+JNQ R7, R1, R6
+LWI R0, 0xFFFF
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 3
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_check_ready_response:
+LWI R7, _Game_ServerHandleClientPlacement_check_start_game_response
+LWI R6, 3
+JNQ R7, R1, R6
+INC R0, R0
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_check_start_game_response:
+LWI R7, _Game_ServerHandleClientPlacement_check_loop
+LWI R6, 5
+JNQ R7, R1, R6
+LWI R0, 6
+LWI R7, 32768
+LWI R6, 22
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R0, 0xFFFF
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_default:
+JMP _Game_ServerHandleClientPlacement_check_loop
+_Game_ServerHandleClientPlacement_return:
 JMP __std_function_epilogue
 
 
@@ -5040,6 +6187,222 @@ LWI R3, 0
 LWI R7, __std_function_prologue
 JRL R4, R7
 
+_Game_ClientHandleServerResponse_check_loop:
+LWI R7, 65516
+LWD R0, R7
+
+LWI R7, _Game_ClientHandleServerResponse_return
+JEZ R7, R0
+LWI R7, 65516
+LWI R6, 0x0100
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 65516
+LWI R6, 1
+ADD R7, R7, R6
+MOV R0, R7
+
+LWD R1, R0
+LWI R7, _Game_ClientHandleServerResponse_check_remove_response
+LWI R6, 9
+JNQ R7, R1, R6
+INC R0, R0
+LWD R1, R0
+LWI R7, _Game_ClientHandleServerResponse_place_ship_success
+JNZ R7, R1
+LWI R0, 5
+LWI R7, 32768
+LWI R6, 9
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R0, 100
+LWI R7, 32768
+LWI R6, 10
+ADD R7, R7, R6
+SWD R7, R0
+
+JMP _Game_ClientHandleServerResponse_end_wait
+_Game_ClientHandleServerResponse_place_ship_success:
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_PlaceShip
+JRL R6, R7
+
+_Game_ClientHandleServerResponse_end_wait:
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_check_remove_response:
+LWI R7, _Game_ClientHandleServerResponse_check_ready_request
+LWI R6, 11
+JNQ R7, R1, R6
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R5, 0xFFFF
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R5
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_RemoveShip
+JRL R6, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_check_ready_request:
+LWI R7, _Game_ClientHandleServerResponse_check_ready_response
+LWI R6, 2
+JNQ R7, R1, R6
+LWI R0, 0xFFFF
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 3
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_check_ready_response:
+LWI R7, _Game_ClientHandleServerResponse_check_start_game_request
+LWI R6, 3
+JNQ R7, R1, R6
+INC R0, R0
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+SWD R7, R1
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_check_start_game_request:
+LWI R7, _Game_ClientHandleServerResponse_default
+LWI R6, 4
+JNQ R7, R1, R6
+LWI R0, 6
+LWI R7, 32768
+LWI R6, 22
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R0, 0x0000
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 5
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_default:
+JMP _Game_ClientHandleServerResponse_check_loop
+_Game_ClientHandleServerResponse_return:
 JMP __std_function_epilogue
 
 
@@ -5051,6 +6414,187 @@ LWI R3, 0
 LWI R7, __std_function_prologue
 JRL R4, R7
 
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 7
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R7, _Game_ClientHandlePlacement_check_escape
+JEZ R7, R0
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R6, R7
+LWI R6, 204
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R1, 10
+LWI R7, _Game_ClientHandlePlacement_check_not_all_ships
+JNQ R7, R0, R1
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, _Game_ClientHandlePlacement_send_ship_place_request
+JNZ R7, R0
+LWI R0, 0xFFFF
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R6, R7
+LWI R6, 255
+ADD R7, R6, R7
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 2
+SWD R0, R1
+JMP _Game_ClientHandlePlacement_send_packet
+_Game_ClientHandlePlacement_check_not_all_ships:
+JMP _Game_ClientHandlePlacement_send_ship_place_request
+_Game_ClientHandlePlacement_send_ship_place_request:
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 8
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 0
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 1
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 2
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 3
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+_Game_ClientHandlePlacement_send_packet:
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_StartWaitRemote
+JRL R6, R7
+
+JMP _Game_ClientHandlePlacement_return
+_Game_ClientHandlePlacement_check_escape:
+LWI R7, 8
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R7, _Game_ClientHandlePlacement_return
+JEZ R7, R0
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 10
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 0
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 1
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 2
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 539
+ADD R7, R6, R7
+LWI R6, 3
+ADD R7, R6, R7
+LWD R1, R7
+
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_StartWaitRemote
+JRL R6, R7
+
+_Game_ClientHandlePlacement_return:
 JMP __std_function_epilogue
 
 
@@ -5206,6 +6750,606 @@ JMP __std_function_epilogue
 
 
 
+_Game_SendMyCursorToEnemy:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 7
+LWI R6, 32768
+ADD R7, R6, R7
+LWD R2, R7
+LWI R0, 0
+MLL R1, R0, R2
+MLH R2, R0, R2
+NOT R2, R2
+AND R0, R2, R1
+
+LWI R7, _Game_SendMyCursorToEnemy_check_cursor_counter
+JEZ R7, R0
+LWI R0, 65516
+LWI R1, 9
+ADD R0, R0, R1
+LWI R1, 17
+SWD R0, R1
+INC R0, R0
+LWI R1, 32768
+LWI R2, 535
+ADD R1, R1, R2
+LWD R1, R1
+SWD R0, R1
+INC R0, R0
+LWI R1, 32768
+LWI R2, 536
+ADD R1, R1, R2
+LWD R1, R1
+SWD R0, R1
+LWI R0, 32768
+LWI R1, 21
+ADD R0, R0, R1
+LWD R0, R0
+LWI R7, _Game_SendMyCursorToEnemy_start_wait
+JEZ R7, R0
+_Game_SendMyCursorToEnemy_start_wait:
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_StartWaitRemote
+JRL R6, R7
+
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP _Game_SendMyCursorToEnemy_return
+_Game_SendMyCursorToEnemy_check_cursor_counter:
+LWI R0, 32768
+LWI R1, 16
+ADD R0, R0, R1
+LWD R0, R0
+LWI R7, _Game_SendMyCursorToEnemy_return
+JNZ R7, R0
+LWI R0, 65516
+LWI R1, 9
+ADD R0, R0, R1
+LWI R1, 16
+SWD R0, R1
+INC R0, R0
+LWI R1, 32768
+LWI R2, 535
+ADD R1, R1, R2
+LWD R1, R1
+SWD R0, R1
+INC R0, R0
+LWI R1, 32768
+LWI R2, 536
+ADD R1, R1, R2
+LWD R1, R1
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+_Game_SendMyCursorToEnemy_return:
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_HandleMyTurnInput:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleCursorMovement
+JRL R6, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_SendMyCursorToEnemy
+JRL R6, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_Server_HandleShootRequest:
+LWI R3, 3
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+
+
+JMP __std_function_epilogue
+
+
+
+
+
+_ProcessReceivedCell:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
+
+
+
+
+
+_Game_Client_HandleShootRequest:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R2, 0x0000
+LWI R7, 65516
+LWI R6, 1
+ADD R7, R7, R6
+MOV R3, R7
+
+INC R3, R3
+LWD R1, R3
+INC R3, R3
+LWD R4, R3
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+SWD R7, R4
+
+INC R3, R3
+LWD R4, R3
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+SWD R7, R4
+
+LWI R7, _Game_Client_HandleShootRequest_process_cell
+LWI R6, 4
+JNQ R7, R1, R6
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+LWD R2, R7
+
+LWI R7, 205
+ADD R7, R2, R7
+MOV R2, R7
+
+LWI R7, 0
+ADD R7, R2, R7
+MOV R5, R7
+
+INC R3, R3
+LWD R4, R3
+SWD R5, R4
+LWI R7, 1
+ADD R7, R2, R7
+MOV R5, R7
+
+INC R3, R3
+LWD R4, R3
+SWD R5, R4
+LWI R7, 2
+ADD R7, R2, R7
+MOV R5, R7
+
+INC R3, R3
+LWD R4, R3
+SWD R5, R4
+LWI R7, 4
+ADD R7, R2, R7
+MOV R5, R7
+
+INC R3, R3
+LWD R4, R3
+SWD R5, R4
+_Game_Client_HandleShootRequest_process_cell:
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+LWD R3, R7
+
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+LWD R4, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R4
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _ProcessReceivedCell
+JRL R6, R7
+
+LWI R0, 18
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_HandleShootRequest:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 32768
+LWI R6, 21
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_HandleShootRequest_not_server
+JEZ R7, R0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_Server_HandleShootRequest
+JRL R6, R7
+
+JMP _Game_HandleShootRequest_return
+_Game_HandleShootRequest_not_server:
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_Client_HandleShootRequest
+JRL R6, R7
+
+_Game_HandleShootRequest_return:
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_HandleRemoteInput:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+_Game_HandleRemoteInput_check_loop:
+LWI R7, 65516
+LWD R0, R7
+
+LWI R7, _Game_HandleRemoteInput_return
+JEZ R7, R0
+LWI R7, 65516
+LWI R6, 0x0100
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R0, 65516
+LWI R1, 1
+ADD R0, R0, R1
+LWD R1, R0
+LWI R7, _Game_HandleRemoteInput_check_shoot_request
+LWI R2, 16
+JNQ R7, R1, R2
+INC R0, R0
+LWD R1, R0
+LWI R2, 32768
+LWI R3, 537
+ADD R2, R2, R3
+SWD R2, R1
+INC R0, R0
+LWD R1, R0
+LWI R2, 32768
+LWI R3, 538
+ADD R2, R2, R3
+SWD R2, R1
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_shoot_request:
+LWI R7, _Game_HandleRemoteInput_check_shoot_response
+LWI R2, 17
+JNQ R7, R1, R2
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleShootRequest
+JRL R6, R7
+
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_shoot_response:
+LWI R7, _Game_HandleRemoteInput_check_turn_request
+LWI R2, 18
+JNQ R7, R1, R2
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_turn_request:
+LWI R7, _Game_HandleRemoteInput_check_turn_response
+LWI R2, 12
+JNQ R7, R1, R2
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_turn_response:
+LWI R7, _Game_HandleRemoteInput_check_end_game_request
+LWI R2, 13
+JNQ R7, R1, R2
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_end_game_request:
+LWI R7, _Game_HandleRemoteInput_check_end_game_response
+LWI R2, 6
+JNQ R7, R1, R2
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_check_end_game_response:
+LWI R7, _Game_HandleRemoteInput_default
+LWI R2, 7
+JNQ R7, R1, R2
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_default:
+JMP _Game_HandleRemoteInput_check_loop
+_Game_HandleRemoteInput_return:
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_MainGame:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_UpdateWaitRemote
+JRL R6, R7
+
+LWI R7, _Game_MainGame_return
+JNZ R7, R0
+LWI R7, 32768
+LWI R6, 9
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_clear_bg_zero
+JEZ R7, R0
+LWI R0, 1
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+JMP _Game_MainGame_draw_turn
+_Game_MainGame_clear_bg_zero:
+LWI R0, 0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+_Game_MainGame_draw_turn:
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_draw_enemy_turn
+JEZ R7, R0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Video_DrawMyTurn
+JRL R6, R7
+
+JMP _Game_MainGame_check_wait_remote
+_Game_MainGame_draw_enemy_turn:
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Video_DrawEnemyTurn
+JRL R6, R7
+
+_Game_MainGame_check_wait_remote:
+LWI R7, 32768
+LWI R6, 13
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_handle_local_input
+JEZ R7, R0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Video_DrawWaitRemote
+JRL R6, R7
+
+JMP _Game_MainGame_handle_remote_input
+_Game_MainGame_handle_local_input:
+LWI R7, 32768
+LWI R6, 545
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_check_need_switch
+JEZ R7, R0
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 6
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_StartWaitRemote
+JRL R6, R7
+
+JMP _Game_MainGame_handle_remote_input
+_Game_MainGame_check_need_switch:
+LWI R7, 32768
+LWI R6, 544
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_check_my_turn
+JEZ R7, R0
+LWI R0, 0
+LWI R7, 32768
+LWI R6, 544
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 12
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_StartWaitRemote
+JRL R6, R7
+
+JMP _Game_MainGame_handle_remote_input
+_Game_MainGame_check_my_turn:
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+LWD R0, R7
+
+LWI R7, _Game_MainGame_handle_remote_input
+JEZ R7, R0
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleMyTurnInput
+JRL R6, R7
+
+_Game_MainGame_handle_remote_input:
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleRemoteInput
+JRL R6, R7
+
+_Game_MainGame_return:
+JMP __std_function_epilogue
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5258,7 +7402,7 @@ JRL R6, R7
 
 JMP _Game_Tick_return
 _Game_Tick_placing_ships:
-LWI R7, _Game_Tick_return
+LWI R7, _Game_Tick_main_game
 LWI R6, 3
 JNQ R7, R0, R6
 LWI R7, 63111
@@ -5266,6 +7410,18 @@ LWD R7, R7
 LWI R6, 63112
 SWD R6, R7
 LWI R7, _Game_PlacingShips
+JRL R6, R7
+
+JMP _Game_Tick_return
+_Game_Tick_main_game:
+LWI R7, _Game_Tick_return
+LWI R6, 6
+JNQ R7, R0, R6
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_MainGame
 JRL R6, R7
 
 JMP _Game_Tick_return
@@ -5319,12 +7475,12 @@ SWD R6, R7
 LWI R7, _memset
 JRL R6, R7
 
-LWI R0, 0xffff
+LWI R0, 0x0000
 LWI R7, 32768
 LWI R6, 21
 ADD R7, R7, R6
 SWD R7, R0
-LWI R0, 3
+LWI R0, 1
 LWI R7, 32768
 LWI R6, 22
 ADD R7, R7, R6

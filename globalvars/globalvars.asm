@@ -45,6 +45,8 @@
 #define SHIP_BACK_COLOR           10
 #define CHAR_OVER_WALL_COLOR       1
 #define FIELD_WALL_COLOR          14
+#define CURSOR_SYMBOL             11
+#define CURSOR_BACK_COLOR         10
  
 // Cell states
 #define CELL_EMPTY     0
@@ -157,13 +159,17 @@
 #define globalvar_my_placement_state     23  // sizeof  == 256
 #define globalvar_enemy_placement_state  279 // sizeof == 256
 
-#define globalvar_my_cursor_x 280
-#define globalvar_my_cursor_y 281
+#define globalvar_my_cursor_x 535
+#define globalvar_my_cursor_y 536
 
-#define globalvar_enemy_cursor_x 282
-#define globalvar_enemy_cursor_y 283
+#define globalvar_enemy_cursor_x 537
+#define globalvar_enemy_cursor_y 538
 
-#define globalvar_ship_placement_state 284 // sizeof == 4
+#define globalvar_ship_placement_state 539 // sizeof == 4
+
+#define globalvar_my_turn             543
+#define globalvar_need_switch         544
+#define globalvar_all_ships_destroyed 545
 
 globalvar_SHIP_SIZES_AND_COUNT:
     .data16 4, 1
