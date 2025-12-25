@@ -38,7 +38,7 @@
 #define SHIP_FRONT_COLOR          15
 #define DITHER_LEVEL1            112
 #define MISS_FRONT_COLOR          15
-#define HIT_SYMBOL                54
+#define HIT_SYMBOL                56
 #define HIT_FRONT_COLOR            1
 #define SUNK_SYMBOL              114
 #define SHIP_PLACING_FRONT_COLOR   1

@@ -1,6 +1,153 @@
 #ifndef _GAME_MAIN_GAME_ASM_
 #define _GAME_MAIN_GAME_ASM_
 
+
+FUNCTION _Game_ShootToField, 3
+
+    #define _Game_ShootToField_localvar_cell 3
+    #define _Game_ShootToField_localvar_s    4
+    #define _Game_ShootToField_localvar_res  5 // sizeof = 2
+
+    #define _Game_ShootToField_localarg_cell_ptr         7
+    #define _Game_ShootToField_localarg_placement_state  8
+    #define _Game_ShootToField_localarg_x                9
+    #define _Game_ShootToField_localarg_y               10
+
+
+    LOAD_SP R6
+
+    LWI R7, _Game_ShootToField_localarg_placement_state
+    ADD R0, R7, R6
+
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localarg_x, R6
+    LOAD_OFFSET_IMM_REG R2, _Game_ShootToField_localarg_y, R6
+    
+    ARRAY_INDEX_REG_REG R0, R0, R2, 20 // FIELD_SIZE * sizeof(fieldcell_t)
+    ARRAY_INDEX_REG_REG R0, R0, R1, 2  //              sizeof(fieldcell_t)
+
+    STORE_OFFSET_IMM_REG R0, _Game_ShootToField_localvar_cell, R6
+    
+    //LOAD_OFFSET_IMM_REG R3, 
+
+
+    OFFSET_STRUCT_REG_IMM R3, R0, fieldcell_t_state_offset
+    LWD R4, R3
+
+
+    LWI R7, _Game_ShootToField_case_cell_ship
+    LWI R5, CELL_EMPTY
+    JNQ R7, R4, R5
+
+    JMP _Game_ShootToField_return
+
+
+_Game_ShootToField_case_cell_ship:
+    
+_Game_ShootToField_return:
+ENDFUNCTION
+
+
+
+#macro Game_ShootToField cell_ptr, placement_state, x, y
+
+    PUSH_PREV_SP
+
+    PUSH x
+    PUSH y
+    PUSH placement_state
+    PUSH cell_ptr
+
+    CALL _Game_ShootToField
+
+#endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_ServerShoot, 3
+
+    LWI R7, NET_BASE_ADDR
+    LWI R6, NET_SEND_PACKET
+
+    ADD R1, R6, R7
+    INC R1, R1
+
+    // only for test now
+
+    LWI R0, CELL_HIT
+
+    SWD R1, R0
+    
+    INC R1, R1
+    LOAD_OFFSET_IMM_IMM R0, globalvar_my_cursor_x, RAM_BASE_ADDR
+    SWD R1, R0
+
+    INC R1, R1
+    LOAD_OFFSET_IMM_IMM R0, globalvar_my_cursor_y, RAM_BASE_ADDR
+    SWD R1, R0
+
+ENDFUNCTION
+
+
+#macro Game_ServerShoot
+    PUSH_PREV_SP
+    CALL _Game_ServerShoot
+#endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 FUNCTION _Game_SendMyCursorToEnemy, 0
 
     LOAD_SP R6
@@ -43,7 +190,7 @@ FUNCTION _Game_SendMyCursorToEnemy, 0
     JEZ R7, R0
 
     // ServerShoot();
-    //Game_ServerShoot
+    Game_ServerShoot
 
 _Game_SendMyCursorToEnemy_start_wait:
     // StartWaitRemote();
@@ -168,17 +315,98 @@ ENDFUNCTION
 
 
 
+FUNCTION _Game_SunkShip, 0
+
+    
+
+ENDFUNCTION
+
+
+#macro Game_SunkShip placement_state, s
+
+    PUSH_PREV_SP
+
+    PUSH s
+    PUSH placement_state
+
+    CALL _Game_SunkShip
+
+#endmacro
 
 
 
+FUNCTION _Game_ProcessReceivedCell, 1
 
 
+    #define _Game_ProcessReceivedCell_localvar_current_cell    3
 
+    #define _Game_ProcessReceivedCell_localarg_placement_state 4
+    #define _Game_ProcessReceivedCell_localarg_state           5
+    #define _Game_ProcessReceivedCell_localarg_s               6
+    #define _Game_ProcessReceivedCell_localarg_x               7
+    #define _Game_ProcessReceivedCell_localarg_y               8
 
-FUNCTION _ProcessReceivedCell, 0
+    LOAD_SP R6
+    LOAD_OFFSET_IMM_REG R0, _Game_ProcessReceivedCell_localarg_placement_state, R6
+    LOAD_OFFSET_IMM_REG R1, _Game_ProcessReceivedCell_localarg_y, R6
+    LOAD_OFFSET_IMM_REG R2, _Game_ProcessReceivedCell_localarg_x, R6
+    
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_field_offset    
+    ARRAY_INDEX_REG_REG R0, R0, R1, 20 // FIELD_SIZE * sizeof(fieldcell_t)
+    ARRAY_INDEX_REG_REG R0, R0, R2, 2  // sizeof(fieldcell_t)
+    STORE_OFFSET_IMM_REG R0, _Game_ProcessReceivedCell_localvar_current_cell, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
 
+    LOAD_OFFSET_IMM_REG R1, _Game_ProcessReceivedCell_localarg_state, R6 
 
+// switch (state)
+// {
+// case CELL_HIT:
 
+    LWI R7, _Game_ProcessReceivedCell_cell_sunk
+    LWI R5, CELL_HIT
+    JNQ R7, R1, R5
+
+    NOP
+    SWD R0, R1
+
+    LWI R1, 5
+    STORE_OFFSET_IMM_IMM R1, globalvar_bg_blink_counter, RAM_BASE_ADDR
+
+    JMP _Game_ProcessReceivedCell_return
+
+_Game_ProcessReceivedCell_cell_sunk:
+// case CELL_SUNK:
+
+    LWI R7, _Game_ProcessReceivedCell_cell_miss
+    LWI R5, CELL_SUNK
+    JNQ R7, R1, R5
+
+    LOAD_SP R6
+    LOAD_OFFSET_IMM_REG R0, _Game_ProcessReceivedCell_localarg_placement_state, R6
+    LOAD_OFFSET_IMM_REG R1, _Game_ProcessReceivedCell_localarg_s, R6
+
+    Game_SunkShip R0, R1
+
+    LWI R1, 10
+    STORE_OFFSET_IMM_IMM R1, globalvar_bg_blink_counter, RAM_BASE_ADDR
+
+    JMP _Game_ProcessReceivedCell_return
+
+_Game_ProcessReceivedCell_cell_miss:
+// case CELL_MISS:
+
+    LWI R7, _Game_ProcessReceivedCell_cell_dont_shot
+    LWI R5, CELL_MISS
+    JNQ R7, R1, R5
+
+    NOP
+    SWD R0, R1
+
+    JMP _Game_ProcessReceivedCell_return
+    
+_Game_ProcessReceivedCell_cell_dont_shot:
+_Game_ProcessReceivedCell_return:
 ENDFUNCTION
 
 
@@ -187,7 +415,7 @@ ENDFUNCTION
 
 
 
-#macro ProcessReceivedCell placement_state, state, s, x, y
+#macro Game_ProcessReceivedCell placement_state, state, s, x, y
     PUSH_PREV_SP
 
     PUSH y
@@ -196,7 +424,7 @@ ENDFUNCTION
     PUSH state
     PUSH placement_state
 
-    CALL _ProcessReceivedCell
+    CALL _Game_ProcessReceivedCell
 #endmacro
 
 
@@ -229,7 +457,10 @@ FUNCTION _Game_Client_HandleShootRequest, 0
     JNQ R7, R1, R6
 
     // s = enemy_placement_state.ships;
-    LOAD_OFFSET_IMM_IMM R2, globalvar_enemy_placement_state, RAM_BASE_ADDR
+    LWI R6, RAM_BASE_ADDR
+    LWI R7, globalvar_enemy_placement_state
+    ADD R2, R6, R7
+    NOP
     OFFSET_STRUCT_REG_IMM R2, R2, placement_state_t_ships_offset
 
     // s->x = incomming_packet.data[3];
@@ -261,13 +492,10 @@ _Game_Client_HandleShootRequest_process_cell:
     OFFSET_IMM_IMM R0, globalvar_my_placement_state, RAM_BASE_ADDR
     LOAD_OFFSET_IMM_IMM R3, globalvar_enemy_cursor_x, RAM_BASE_ADDR
     LOAD_OFFSET_IMM_IMM R4, globalvar_enemy_cursor_y, RAM_BASE_ADDR
-
-    ProcessReceivedCell R0, R1, R2, R3, R4
+    Game_ProcessReceivedCell R0, R1, R2, R3, R4
 
     LWI R0, PACKET_SHOOT_RESPONSE
-
     STORE_OFFSET_IMM_IMM R0, NET_SEND_PACKET, NET_BASE_ADDR
-
 
     NET_SendPacket
     Game_EndWaitRemote

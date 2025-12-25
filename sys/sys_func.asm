@@ -21,7 +21,7 @@
 // <LOWER ADDRESS>
 
 // SP points on address were could PUSH
-// BP it's SP - 1
+// BP it's (SP - 1)
 // 
 #define FUNC_VARS_OFFSET 3
 
