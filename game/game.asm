@@ -232,34 +232,13 @@ ENDFUNCTION
     CALL _Game_EndWaitRemote
 #endmacro
 
-#include "game_error.asm"
-#include "game_choosemode.asm"
-#include "game_wait_for_connection.asm"
-#include "game_update_counters.asm"
-#include "game_placingships.asm"
-#include "game_maingame.asm"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #macro Game_Init
+
+
+    LWI R0, RAM_BASE_ADDR
+    LWI R1, 0
+    LWI R2, 600
+    memset R0, R1, R2
 
     LWI R0, 0x0000
     STORE_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
@@ -268,6 +247,36 @@ ENDFUNCTION
     STORE_OFFSET_IMM_IMM R0, globalvar_game_state , RAM_BASE_ADDR
 
 #endmacro
+
+#include "game_error.asm"
+#include "game_choosemode.asm"
+#include "game_wait_for_connection.asm"
+#include "game_update_counters.asm"
+#include "game_placingships.asm"
+#include "game_maingame.asm"
+#include "game_end.asm"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -319,10 +328,18 @@ _Game_Tick_placing_ships:
     JMP _Game_Tick_return
 
 _Game_Tick_main_game:
-    LWI R7, _Game_Tick_error
+    LWI R7, _Game_Tick_game_end
     LWI R6, STATE_MAIN_GAME
     JNQ R7, R0, R6
     Game_MainGame
+    JMP _Game_Tick_return
+
+
+_Game_Tick_game_end:
+    LWI R7, _Game_Tick_error
+    LWI R6, STATE_GAME_END
+    JNQ R7, R0, R6
+    Game_End
     JMP _Game_Tick_return
 
 _Game_Tick_error:

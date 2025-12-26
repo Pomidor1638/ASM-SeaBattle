@@ -177,6 +177,12 @@
 #define globalvar_need_switch         544
 #define globalvar_all_ships_destroyed 545
 
+#define globalvar_end_game_counter       546
+#define globalvar_end_game_blink_counter 547
+#define globalvar_end_game_blink_count   548
+#define globalvar_end_game_blink         549
+
+
 globalvar_SHIP_SIZES_AND_COUNT:
     .data16 4, 1
     .data16 3, 2

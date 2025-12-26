@@ -69,6 +69,9 @@ _Game_UpdateCounters_remote_waiting_counter:
     DEC R0, R0
     STORE_OFFSET_IMM_IMM R0, globalvar_remote_waiting_counter, RAM_BASE_ADDR
 
+
+
+
 _Game_UpdateCounters_dot_counter:
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_dot_counter, RAM_BASE_ADDR
@@ -77,7 +80,7 @@ _Game_UpdateCounters_dot_counter:
     DEC R0, R0
     STORE_OFFSET_IMM_IMM R0, globalvar_dot_counter, RAM_BASE_ADDR
 
-    JMP _Game_UpdateCounters_return
+    JMP _Game_UpdateCounters_end_game_counter
 
 _Game_UpdateCounters_dot_counter_else:
 
@@ -100,7 +103,43 @@ _Game_UpdateCounters_dots_count_reset:
     LWI R0, 0
 _Game_UpdateCounters_dots_count_store:
     STORE_OFFSET_IMM_IMM R0, globalvar_dots_count, RAM_BASE_ADDR
+    JMP _Game_UpdateCounters_end_game_counter
+
+_Game_UpdateCounters_end_game_counter:
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_end_game_counter, RAM_BASE_ADDR
+    LWI R7, _Game_UpdateCounters_end_game_blink_counter
+    JEZ R7, R0
+    DEC R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_counter, RAM_BASE_ADDR
+    
+
+_Game_UpdateCounters_end_game_blink_counter:
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_end_game_blink_counter, RAM_BASE_ADDR
+    LWI R7, _Game_UpdateCounters_end_game_blink_count
+    JEZ R7, R0
+    DEC R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_counter, RAM_BASE_ADDR
+    
     JMP _Game_UpdateCounters_return
+
+_Game_UpdateCounters_end_game_blink_count:
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_end_game_blink_count, RAM_BASE_ADDR
+    LWI R7, _Game_UpdateCounters_return
+    JEZ R7, R0
+
+    DEC R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_count, RAM_BASE_ADDR
+    
+    LOAD_OFFSET_IMM_IMM R0, globalvar_end_game_blink, RAM_BASE_ADDR
+    NOT R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink, RAM_BASE_ADDR
+    
+    LWI R0, 10
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_counter, RAM_BASE_ADDR
+
 
 _Game_UpdateCounters_return:
 ENDFUNCTION

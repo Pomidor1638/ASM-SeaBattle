@@ -1563,13 +1563,19 @@ ENDFUNCTION
 
 FUNCTION _Game_ClientHandlePlacement, 0
 
-    LOAD_SP R6
+
+    OFFSET_IMM_IMM R0, globalvar_my_placement_state, RAM_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_ready_offset
+    LWD R0, R0
+    
+    LWI R7, _Game_ClientHandlePlacement_return
+    JNZ R7, R0          // if ready, return
 
     // if (isKeyJustPressed(SDL_SCANCODE_RETURN))
     Input_IsKeyJustPressed globalvar_keystate_offset_return
     LWI R7, _Game_ClientHandlePlacement_check_escape
-    JEZ R7, R0          // if not pressed, check escape
-    
+    JEZ R7, R0          // if not pressed, check escape    
+
     // Check if all ships placed and not ready yet
     // if (my_placement_state.ships_count == MAX_SHIPS && !my_placement_state.ready)
     LOAD_OFFSET_STRUCT_IMM_IMM R0, globalvar_my_placement_state, placement_state_t_ships_count_offset, RAM_BASE_ADDR

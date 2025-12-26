@@ -327,5 +327,6 @@ ENDFUNCTION
 #include "video_wait_for_connection.asm"
 #include "video_placingships.asm"
 #include "video_maingame.asm"
+#include "video_game_end.asm"
 
 #endif

@@ -1365,6 +1365,64 @@ ENDFUNCTION
 
 
 
+
+FUNCTION _Game_HandleEndGameRequest, 0
+
+    LWI R0, STATE_GAME_END
+    STORE_OFFSET_IMM_IMM R0, globalvar_game_state, RAM_BASE_ADDR
+    LWI R0, 200
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_counter, RAM_BASE_ADDR
+    LWI R0, 10
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_counter, RAM_BASE_ADDR
+    LWI R0, 10
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_count, RAM_BASE_ADDR
+
+    LWI R0, PACKET_END_GAME_RESPONSE
+    STORE_OFFSET_IMM_IMM R0, NET_SEND_PACKET, NET_BASE_ADDR
+
+    NET_SendPacket
+
+ENDFUNCTION
+
+
+
+#macro Game_HandleEndGameRequest
+    PUSH_PREV_SP
+    CALL _Game_HandleEndGameRequest
+#endmacro
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_HandleEndGameResponse, 0
+
+    LWI R0, STATE_GAME_END
+    STORE_OFFSET_IMM_IMM R0, globalvar_game_state, RAM_BASE_ADDR
+    LWI R0, 200
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_counter, RAM_BASE_ADDR
+    LWI R0, 10
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_counter, RAM_BASE_ADDR
+    LWI R0, 10
+    STORE_OFFSET_IMM_IMM R0, globalvar_end_game_blink_count, RAM_BASE_ADDR
+
+
+    Game_EndWaitRemote
+
+ENDFUNCTION
+
+
+#macro Game_HandleEndGameResponse
+    PUSH_PREV_SP
+    CALL _Game_HandleEndGameResponse
+#endmacro
+
+
 FUNCTION _Game_HandleRemoteInput, 0
 
     LOAD_SP R6
@@ -1457,7 +1515,7 @@ _Game_HandleRemoteInput_check_end_game_request:
     JNQ R7, R1, R2
 
     // HandleEndGameRequest();
-    // Game_HandleEndGameRequest
+    Game_HandleEndGameRequest
     JMP _Game_HandleRemoteInput_check_loop
 
 _Game_HandleRemoteInput_check_end_game_response:
@@ -1467,7 +1525,7 @@ _Game_HandleRemoteInput_check_end_game_response:
     JNQ R7, R1, R2
 
     // HandleEndGameResponse();
-    // Game_HandleEndGameResponse
+    Game_HandleEndGameResponse
     JMP _Game_HandleRemoteInput_check_loop
 
 _Game_HandleRemoteInput_default:
