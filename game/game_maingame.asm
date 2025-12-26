@@ -234,6 +234,77 @@ _Game_SunkShip_fill_cell_miss_y_loop_end:
 
 
 _Game_SunkShip_fill_cell_sunk:
+
+    // R0 - ptr
+    // R1 - inc
+    // R2 - size
+    // R3 - CELL_SUNK
+    // R4 - 
+    // R5 - 
+    // R6 -
+    // R7 - 
+
+    // R0 - ptr
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localarg_placement_state, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_field_offset
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+
+    LOAD_OFFSET_IMM_REG R5, _Game_SunkShip_localarg_s, R6
+    OFFSET_STRUCT_REG_IMM R2, R5, ship_t_x_offset
+    LWD R2, R2
+    OFFSET_STRUCT_REG_IMM R3, R5, ship_t_y_offset
+    LWD R3, R3
+
+    ARRAY_INDEX_REG_REG R0, R0, R3, 20 // FIELD_SIZE * sizeof(fieldcell_t)
+    ARRAY_INDEX_REG_REG R0, R0, R2, 2  //              sizeof(fieldcell_t)
+
+    // R1 - inc
+    OFFSET_STRUCT_REG_IMM R2, R5, ship_t_horizontal_offset
+    LWD R2, R2
+
+    LWI R7, _Game_SunkShip_fill_cell_sunk_not_horizontal
+    JEZ R7, R2
+
+    LWI R1, 2
+
+    JMP _Game_SunkShip_fill_cell_sunk_size_init
+
+_Game_SunkShip_fill_cell_sunk_not_horizontal:
+
+
+    LWI R1, 20
+
+
+_Game_SunkShip_fill_cell_sunk_size_init:
+
+    
+    OFFSET_STRUCT_REG_IMM R2, R5, ship_t_size_offset
+    LWD R2, R2
+
+    LWI R3, CELL_SUNK
+
+    LWI R7, _Game_SunkShip_return
+
+    // R0 - ptr
+    // R1 - inc
+    // R2 - size
+    // R3 - CELL_SUNK
+    // R4 - 
+    // R5 - 
+    // R6 -
+    // R7 - 
+
+_Game_SunkShip_fill_cell_sunk_loop:
+
+    JEZ R7, R2
+
+    SWD R0, R3
+
+    DEC R2, R2
+    ADD R0, R0, R1
+    JMP _Game_SunkShip_fill_cell_sunk_loop
+
+_Game_SunkShip_return:
 ENDFUNCTION
 
 #macro Game_SunkShip placement_state, s
@@ -787,6 +858,112 @@ FUNCTION _Game_Server_HandleShootRequest, 3
     #define _Game_Server_HandleShootRequest_localvar_cell 3  // 2 words: state, ship_index
     #define _Game_Server_HandleShootRequest_localvar_ship_ptr 5
 
+    OFFSET_IMM_IMM R0, NET_RECV_PACKET, NET_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R0, R0, packet_t_data_offset
+
+    LWD R1, R0
+    STORE_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_x, RAM_BASE_ADDR
+
+    INC R0, R0
+    LWD R1, R0
+    STORE_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_y, RAM_BASE_ADDR
+
+    LOAD_SP R6
+    LWI R0, _Game_Server_HandleShootRequest_localvar_cell
+    ADD R0, R0, R6
+    OFFSET_IMM_IMM R1, globalvar_my_placement_state, RAM_BASE_ADDR
+    LOAD_OFFSET_IMM_IMM R2, globalvar_enemy_cursor_x, RAM_BASE_ADDR
+    LOAD_OFFSET_IMM_IMM R3, globalvar_enemy_cursor_y, RAM_BASE_ADDR
+
+    Game_ShootToField R0, R1, R2, R3
+
+    // outgoing_packet.type = PACKET_SHOOT_RESPONSE;
+    OFFSET_IMM_IMM R0, NET_SEND_PACKET, NET_BASE_ADDR
+    LWI R7, PACKET_SHOOT_RESPONSE
+    SWD R0, R7
+
+    // outgoing_packet.data[0] = cell.state;
+    INC R0, R0
+    LOAD_SP R6
+    OFFSET_IMM_REG R1, _Game_Server_HandleShootRequest_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R2, R1, fieldcell_t_state_offset
+    LWD R2, R2
+    SWD R0, R2
+
+	// outgoing_packet.data[1] = enemy_cursor_x;
+    INC R0, R0
+    LOAD_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_x, RAM_BASE_ADDR
+    SWD R0, R1
+
+    
+	// outgoing_packet.data[2] = enemy_cursor_y;
+    INC R0, R0
+    LOAD_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_y, RAM_BASE_ADDR
+    SWD R0, R1
+
+    LOAD_SP R6
+    OFFSET_IMM_REG R1, _Game_Server_HandleShootRequest_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R2, R1, fieldcell_t_state_offset
+    LWD R2, R2
+
+    LWI R5, CELL_SUNK
+    LWI R7, _Game_Server_ship_not_sunked
+    JNQ R7, R2, R5
+
+    // s = my_placement_state.ships + cell.ship_index;
+    OFFSET_IMM_IMM R2, globalvar_my_placement_state, RAM_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R2, R2, placement_state_t_ships_offset
+
+    OFFSET_STRUCT_REG_IMM R1, R1, fieldcell_t_ship_index_offset
+    LWD R1, R1
+
+    ARRAY_INDEX_REG_REG R1, R2, R1, 5 // sizeof(ship_t)
+
+    // outgoing_packet.data[3] = s->x;
+    INC R0, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_x_offset
+    LWD R2, R2
+    SWD R0, R2
+
+    // outgoing_packet.data[4] = s->y;
+    INC R0, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_y_offset
+    LWD R2, R2
+    SWD R0, R2
+
+    // outgoing_packet.data[5] = s->size;
+    INC R0, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_size_offset
+    LWD R2, R2
+    SWD R0, R2
+
+    // outgoing_packet.data[6] = s->horizontal;
+    INC R0, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_horizontal_offset
+    LWD R2, R2
+    SWD R0, R2
+
+    JMP _Game_Server_ship_send_packet
+
+_Game_Server_ship_not_sunked:
+
+    LWI R0, 0x0000
+
+    LWI R7, _Game_Server_needswitch_true
+    LWI R5, CELL_MISS
+    JEQ R7, R2, R5
+    JMP _Game_Server_set_needswitch
+
+_Game_Server_needswitch_true:
+    LWI R0, 0xFFFF
+_Game_Server_set_needswitch:
+    STORE_OFFSET_IMM_IMM R0, globalvar_need_switch, RAM_BASE_ADDR
+
+_Game_Server_ship_send_packet:
+
+    NET_SendPacket
+    Game_EndWaitRemote
+
 ENDFUNCTION
 
 #macro Game_Server_HandleShootRequest
@@ -1026,6 +1203,75 @@ ENDFUNCTION
 
 FUNCTION _Game_Client_HandleShootResponse, 2
 
+    #define _Game_Client_HandleShootResponse_localvar_s     3
+    #define _Game_Client_HandleShootResponse_localvar_state 4
+
+    
+    OFFSET_IMM_IMM R0, NET_RECV_PACKET, NET_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R0, R0, packet_t_data_offset
+
+    LOAD_SP R6
+    LWI R1, 0x0000
+    STORE_OFFSET_IMM_REG R1, _Game_Client_HandleShootResponse_localvar_s, R6
+    
+    LWD R1, R0
+    STORE_OFFSET_IMM_REG R1, _Game_Client_HandleShootResponse_localvar_state, R6
+
+    INC R0, R0
+    LWD R1, R0
+    STORE_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_x, RAM_BASE_ADDR
+    
+    INC R0, R0
+    LWD R1, R0
+    STORE_OFFSET_IMM_IMM R1, globalvar_enemy_cursor_y, RAM_BASE_ADDR
+
+    LOAD_SP R6
+    LOAD_OFFSET_IMM_REG R1, _Game_Client_HandleShootResponse_localvar_state, R6
+    LWI R5, CELL_SUNK
+    LWI R7, _Game_Client_HandleShootResponse_process_cell
+    JNQ R7, R1, R5
+
+    OFFSET_IMM_IMM R1, globalvar_enemy_placement_state, RAM_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R1, R1, placement_state_t_ships_offset
+    LOAD_SP R6
+    STORE_OFFSET_IMM_REG R1, _Game_Client_HandleShootResponse_localvar_s, R6
+
+    // s->x = incomming_packet.data[3];
+    INC R0, R0
+    LWD R3, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_x_offset
+    SWD R2, R3
+
+    // s->y = incomming_packet.data[4];
+    INC R0, R0
+    LWD R3, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_y_offset
+    SWD R2, R3
+
+    // s->size = incomming_packet.data[5];
+    INC R0, R0
+    LWD R3, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_size_offset
+    SWD R2, R3
+
+    // s->horizontal = incomming_packet.data[6];
+    INC R0, R0
+    LWD R3, R0
+    OFFSET_STRUCT_REG_IMM R2, R1, ship_t_horizontal_offset
+    SWD R2, R3
+
+_Game_Client_HandleShootResponse_process_cell:
+
+    OFFSET_IMM_IMM R0, globalvar_enemy_placement_state, RAM_BASE_ADDR
+    LOAD_SP R6
+    LOAD_OFFSET_IMM_REG R1, _Game_Client_HandleShootResponse_localvar_state, R6
+    LOAD_OFFSET_IMM_REG R2, _Game_Client_HandleShootResponse_localvar_s    , R6
+    LOAD_OFFSET_IMM_IMM R3, globalvar_enemy_cursor_x, RAM_BASE_ADDR
+    LOAD_OFFSET_IMM_IMM R4, globalvar_enemy_cursor_y, RAM_BASE_ADDR
+    
+    Game_ProcessReceivedCell R0, R1, R2, R3, R4
+    Game_EndWaitRemote
+
 ENDFUNCTION
 
 
@@ -1044,6 +1290,7 @@ FUNCTION _Game_HandleShootResponse, 0
     JEZ R7, R0
 
     Game_Server_HandleShootResponse
+    RETURN
 
 _Game_HandleShootResponse_not_server_mode:
     Game_Client_HandleShootResponse
@@ -1061,11 +1308,56 @@ ENDFUNCTION
 
 
 
+FUNCTION _Game_HandleTurnRequest, 0
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_my_turn, RAM_BASE_ADDR
+    NOT R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_my_turn, RAM_BASE_ADDR
+
+    OFFSET_IMM_IMM R0, NET_SEND_PACKET, NET_BASE_ADDR
+    LWI R1, PACKET_TURN_SWITCH_RESPONSE
+    SWD R0, R1
+
+    NET_SendPacket
+
+ENDFUNCTION
+
+
+#macro Game_HandleTurnRequest
+    PUSH_PREV_SP
+    CALL _Game_HandleTurnRequest
+#endmacro
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_HandleTurnResponse, 0
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_my_turn, RAM_BASE_ADDR
+    NOT R0, R0
+    STORE_OFFSET_IMM_IMM R0, globalvar_my_turn, RAM_BASE_ADDR
+    Game_EndWaitRemote
+
+ENDFUNCTION
+
+
+#macro Game_HandleTurnResponse
+    PUSH_PREV_SP
+    CALL _Game_HandleTurnResponse
+#endmacro
 
 
 
@@ -1145,7 +1437,7 @@ _Game_HandleRemoteInput_check_turn_request:
     JNQ R7, R1, R2
 
     // HandleTurnRequest();
-    // Game_HandleTurnRequest
+    Game_HandleTurnRequest
     JMP _Game_HandleRemoteInput_check_loop
 
 _Game_HandleRemoteInput_check_turn_response:
@@ -1155,7 +1447,7 @@ _Game_HandleRemoteInput_check_turn_response:
     JNQ R7, R1, R2
 
     // HandleTurnResponse();
-    // Game_HandleTurnResponse
+    Game_HandleTurnResponse
     JMP _Game_HandleRemoteInput_check_loop
 
 _Game_HandleRemoteInput_check_end_game_request:

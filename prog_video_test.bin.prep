@@ -4104,6 +4104,111 @@ JMP __std_function_epilogue
 
 
 
+_Game_Error_str1:
+.string "UNEXCEPTED ERROR"
+_Game_Error_str2:
+.string "CPU IS HALTED"
+_Game_Error:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R0, 1
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_Clear
+JRL R6, R7
+
+LWI R0, _Game_Error_str1
+LWI R1, 14
+LWI R2, 0
+LWI R3, 1
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_PrintCentered
+JRL R6, R7
+
+LWI R0, _Game_Error_str2
+LWI R1, 16
+LWI R2, 0
+LWI R3, 1
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Video_PrintCentered
+JRL R6, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R0, 64316
+LWI R1, 1200
+LWI R2, 63116
+LWI R7, _memcpy
+JRL R6, R7
+
+HLT
+JMP __std_function_epilogue
+
+
+
+
+
+
+
+
+
 _Game_ChooseMode:
 LWI R3, 0
 LWI R7, __std_function_prologue
@@ -7010,6 +7115,68 @@ SWD R7, R0
 
 JMP _Game_SunkShip_fill_cell_miss_y_loop
 _Game_SunkShip_fill_cell_sunk:
+LWI R7, 9
+ADD R7, R6, R7
+LWD R0, R7
+
+LWI R7, 4
+ADD R7, R0, R7
+MOV R0, R7
+
+LWI R7, 0
+ADD R7, R0, R7
+MOV R0, R7
+
+LWI R7, 10
+ADD R7, R6, R7
+LWD R5, R7
+
+LWI R7, 0
+ADD R7, R5, R7
+MOV R2, R7
+
+LWD R2, R2
+LWI R7, 1
+ADD R7, R5, R7
+MOV R3, R7
+
+LWD R3, R3
+LWI R7, 20
+MUL R7, R7, R3
+ADD R7, R0, R7
+MOV R0, R7
+
+LWI R7, 2
+MUL R7, R7, R2
+ADD R7, R0, R7
+MOV R0, R7
+
+LWI R7, 4
+ADD R7, R5, R7
+MOV R2, R7
+
+LWD R2, R2
+LWI R7, _Game_SunkShip_fill_cell_sunk_not_horizontal
+JEZ R7, R2
+LWI R1, 2
+JMP _Game_SunkShip_fill_cell_sunk_size_init
+_Game_SunkShip_fill_cell_sunk_not_horizontal:
+LWI R1, 20
+_Game_SunkShip_fill_cell_sunk_size_init:
+LWI R7, 2
+ADD R7, R5, R7
+MOV R2, R7
+
+LWD R2, R2
+LWI R3, 4
+LWI R7, _Game_SunkShip_return
+_Game_SunkShip_fill_cell_sunk_loop:
+JEZ R7, R2
+SWD R0, R3
+DEC R2, R2
+ADD R0, R0, R1
+JMP _Game_SunkShip_fill_cell_sunk_loop
+_Game_SunkShip_return:
 JMP __std_function_epilogue
 
 
@@ -7620,6 +7787,201 @@ JRL R4, R7
 
 
 
+LWI R7, 65516
+LWI R6, 1
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 1
+ADD R7, R0, R7
+MOV R0, R7
+
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+SWD R7, R1
+
+INC R0, R0
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+SWD R7, R1
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R0, 3
+ADD R0, R0, R6
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+LWD R2, R7
+
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+LWD R3, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_ShootToField
+JRL R6, R7
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 18
+SWD R0, R7
+INC R0, R0
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+MOV R1, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+SWD R0, R2
+INC R0, R0
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+LWD R1, R7
+
+SWD R0, R1
+INC R0, R0
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+LWD R1, R7
+
+SWD R0, R1
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+MOV R1, R7
+
+LWI R7, 0
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+LWI R5, 4
+LWI R7, _Game_Server_ship_not_sunked
+JNQ R7, R2, R5
+LWI R7, 32768
+LWI R6, 23
+ADD R7, R7, R6
+MOV R2, R7
+
+LWI R7, 205
+ADD R7, R2, R7
+MOV R2, R7
+
+LWI R7, 1
+ADD R7, R1, R7
+MOV R1, R7
+
+LWD R1, R1
+LWI R7, 5
+MUL R7, R7, R1
+ADD R7, R2, R7
+MOV R1, R7
+
+INC R0, R0
+LWI R7, 0
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+SWD R0, R2
+INC R0, R0
+LWI R7, 1
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+SWD R0, R2
+INC R0, R0
+LWI R7, 2
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+SWD R0, R2
+INC R0, R0
+LWI R7, 4
+ADD R7, R1, R7
+MOV R2, R7
+
+LWD R2, R2
+SWD R0, R2
+JMP _Game_Server_ship_send_packet
+_Game_Server_ship_not_sunked:
+LWI R0, 0x0000
+LWI R7, _Game_Server_needswitch_true
+LWI R5, 2
+JEQ R7, R2, R5
+JMP _Game_Server_set_needswitch
+_Game_Server_needswitch_true:
+LWI R0, 0xFFFF
+_Game_Server_set_needswitch:
+LWI R7, 32768
+LWI R6, 544
+ADD R7, R7, R6
+SWD R7, R0
+
+_Game_Server_ship_send_packet:
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
 JMP __std_function_epilogue
 
 
@@ -7928,6 +8290,164 @@ LWI R3, 2
 LWI R7, __std_function_prologue
 JRL R4, R7
 
+
+
+LWI R7, 65516
+LWI R6, 1
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 1
+ADD R7, R0, R7
+MOV R0, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R1, 0x0000
+LWI R7, 3
+ADD R7, R6, R7
+SWD R7, R1
+
+LWD R1, R0
+LWI R7, 4
+ADD R7, R6, R7
+SWD R7, R1
+
+INC R0, R0
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+SWD R7, R1
+
+INC R0, R0
+LWD R1, R0
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+SWD R7, R1
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R5, 4
+LWI R7, _Game_Client_HandleShootResponse_process_cell
+JNQ R7, R1, R5
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+MOV R1, R7
+
+LWI R7, 205
+ADD R7, R1, R7
+MOV R1, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+SWD R7, R1
+
+INC R0, R0
+LWD R3, R0
+LWI R7, 0
+ADD R7, R1, R7
+MOV R2, R7
+
+SWD R2, R3
+INC R0, R0
+LWD R3, R0
+LWI R7, 1
+ADD R7, R1, R7
+MOV R2, R7
+
+SWD R2, R3
+INC R0, R0
+LWD R3, R0
+LWI R7, 2
+ADD R7, R1, R7
+MOV R2, R7
+
+SWD R2, R3
+INC R0, R0
+LWD R3, R0
+LWI R7, 4
+ADD R7, R1, R7
+MOV R2, R7
+
+SWD R2, R3
+_Game_Client_HandleShootResponse_process_cell:
+LWI R7, 32768
+LWI R6, 279
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R7, 63111
+LWD R6, R7
+
+LWI R7, 4
+ADD R7, R6, R7
+LWD R1, R7
+
+LWI R7, 3
+ADD R7, R6, R7
+LWD R2, R7
+
+LWI R7, 32768
+LWI R6, 537
+ADD R7, R7, R6
+LWD R3, R7
+
+LWI R7, 32768
+LWI R6, 538
+ADD R7, R7, R6
+LWD R4, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R4
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R3
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R2
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R1
+DEC R7, R7
+SWD R6, R7
+LWI R6, 63111
+LWD R7, R6
+SWD R7, R0
+DEC R7, R7
+SWD R6, R7
+LWI R7, _Game_ProcessReceivedCell
+JRL R6, R7
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
+JRL R6, R7
+
 JMP __std_function_epilogue
 
 
@@ -7953,12 +8473,78 @@ SWD R6, R7
 LWI R7, _Game_EndWaitRemote
 JRL R6, R7
 
+JMP __std_function_epilogue
+
 _Game_HandleShootResponse_not_server_mode:
 LWI R7, 63111
 LWD R7, R7
 LWI R6, 63112
 SWD R6, R7
 LWI R7, _Game_Client_HandleShootResponse
+JRL R6, R7
+
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_HandleTurnRequest:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+LWD R0, R7
+
+NOT R0, R0
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 65516
+LWI R6, 9
+ADD R7, R7, R6
+MOV R0, R7
+
+LWI R1, 13
+SWD R0, R1
+LWI R7, 65516
+LWI R6, 0x0200
+LWD R5, R7
+ORR R5, R5, R6
+SWD R7, R5
+
+JMP __std_function_epilogue
+
+
+
+
+
+_Game_HandleTurnResponse:
+LWI R3, 0
+LWI R7, __std_function_prologue
+JRL R4, R7
+
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+LWD R0, R7
+
+NOT R0, R0
+LWI R7, 32768
+LWI R6, 543
+ADD R7, R7, R6
+SWD R7, R0
+
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_EndWaitRemote
 JRL R6, R7
 
 JMP __std_function_epilogue
@@ -8035,11 +8621,25 @@ _Game_HandleRemoteInput_check_turn_request:
 LWI R7, _Game_HandleRemoteInput_check_turn_response
 LWI R2, 12
 JNQ R7, R1, R2
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleTurnRequest
+JRL R6, R7
+
 JMP _Game_HandleRemoteInput_check_loop
 _Game_HandleRemoteInput_check_turn_response:
 LWI R7, _Game_HandleRemoteInput_check_end_game_request
 LWI R2, 13
 JNQ R7, R1, R2
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_HandleTurnResponse
+JRL R6, R7
+
 JMP _Game_HandleRemoteInput_check_loop
 _Game_HandleRemoteInput_check_end_game_request:
 LWI R7, _Game_HandleRemoteInput_check_end_game_response
@@ -8314,7 +8914,7 @@ JRL R6, R7
 
 JMP _Game_Tick_return
 _Game_Tick_main_game:
-LWI R7, _Game_Tick_return
+LWI R7, _Game_Tick_error
 LWI R6, 6
 JNQ R7, R0, R6
 LWI R7, 63111
@@ -8322,6 +8922,18 @@ LWD R7, R7
 LWI R6, 63112
 SWD R6, R7
 LWI R7, _Game_MainGame
+JRL R6, R7
+
+JMP _Game_Tick_return
+_Game_Tick_error:
+LWI R7, _Game_Tick_return
+LWI R6, 5
+JNQ R7, R0, R6
+LWI R7, 63111
+LWD R7, R7
+LWI R6, 63112
+SWD R6, R7
+LWI R7, _Game_Error
 JRL R6, R7
 
 JMP _Game_Tick_return

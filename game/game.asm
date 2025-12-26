@@ -232,6 +232,7 @@ ENDFUNCTION
     CALL _Game_EndWaitRemote
 #endmacro
 
+#include "game_error.asm"
 #include "game_choosemode.asm"
 #include "game_wait_for_connection.asm"
 #include "game_update_counters.asm"
@@ -318,10 +319,17 @@ _Game_Tick_placing_ships:
     JMP _Game_Tick_return
 
 _Game_Tick_main_game:
-    LWI R7, _Game_Tick_return
+    LWI R7, _Game_Tick_error
     LWI R6, STATE_MAIN_GAME
     JNQ R7, R0, R6
     Game_MainGame
+    JMP _Game_Tick_return
+
+_Game_Tick_error:
+    LWI R7, _Game_Tick_return
+    LWI R6, STATE_ERROR
+    JNQ R7, R0, R6
+    Game_Error
     JMP _Game_Tick_return
 
 
