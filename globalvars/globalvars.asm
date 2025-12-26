@@ -128,6 +128,12 @@
 #define placement_state_t_ready_offset        255
 #define placement_state_t_sizeof              256
 
+// packet_t structure
+#define packet_t_type_offset 0
+#define packet_t_data_offset 1
+#define packet_t_sizeof      8
+
+
 // =============================================
 // Global variables memory layout
 // =============================================

@@ -2,48 +2,435 @@
 #define _GAME_MAIN_GAME_ASM_
 
 
-FUNCTION _Game_ShootToField, 3
+FUNCTION _Game_DamageShip, 1
 
-    #define _Game_ShootToField_localvar_cell 3
-    #define _Game_ShootToField_localvar_s    4
-    #define _Game_ShootToField_localvar_res  5 // sizeof = 2
+    #define _Game_DamageShip_localvar_h 3
 
-    #define _Game_ShootToField_localarg_cell_ptr         7
-    #define _Game_ShootToField_localarg_placement_state  8
-    #define _Game_ShootToField_localarg_x                9
-    #define _Game_ShootToField_localarg_y               10
+    #define _Game_DamageShip_localarg_s 4
+    #define _Game_DamageShip_localarg_x 5
+    #define _Game_DamageShip_localarg_y 6
+
+    LOAD_SP R6
+
+    // s->horizontal
+    LOAD_OFFSET_IMM_REG R0, _Game_DamageShip_localarg_s, R6
+    OFFSET_STRUCT_REG_IMM R1, R0, ship_t_horizontal_offset
+    LWD R1, R1
+
+    // if (s->horizontal)
+    LWI R7, _Game_DamageShip_not_horizontal
+    JEZ R7, R1
+
+    LOAD_OFFSET_IMM_REG R1, _Game_DamageShip_localarg_x, R6
+    OFFSET_STRUCT_REG_IMM R2, R0, ship_t_x_offset
+    LWD R2, R2
+
+    SUB R1, R1, R2
+
+    JMP _Game_DamageShip_check_bounds
+
+_Game_DamageShip_not_horizontal:
+
+    LOAD_OFFSET_IMM_REG R1, _Game_DamageShip_localarg_y, R6
+    OFFSET_STRUCT_REG_IMM R2, R0, ship_t_y_offset
+    LWD R2, R2
+
+    SUB R1, R1, R2
+
+    JMP _Game_DamageShip_check_bounds
+
+_Game_DamageShip_check_bounds:
+
+    OFFSET_STRUCT_REG_IMM R2, R0, ship_t_size_offset
+    LWD R2, R2
+    LWI R7, _Game_DamageShip_return_false
+
+    JLZ R7, R1
+    JGQ R7, R1, R2
+
+    // s->hits |= 1 << h
+
+    OFFSET_STRUCT_REG_IMM R2, R0, ship_t_hits_offset    
+    LWD R3, R2
+    LWI R4, 1
+    SLL R4, R4, R1
+    ORR R3, R3, R4
+
+    SWD R2, R3
+
+    OFFSET_STRUCT_REG_IMM R1, R0, ship_t_size_offset
+    LWD R1, R1
+    LWI R2, 1
+    SLL R2, R2, R1
+    DEC R2, R2
+
+    LWI R7, _Game_DamageShip_return_false
+    JNQ R7, R3, R2
+
+_Game_DamageShip_return_true:
+    LWI R0, 0xFFFF
+    RETURN
+_Game_DamageShip_return_false:
+    LWI R0, 0x0000
+ENDFUNCTION
+
+#macro Game_DamageShip s, x, y
+
+    PUSH_PREV_SP 
+
+    PUSH y
+    PUSH x
+    PUSH s
+
+    CALL _Game_DamageShip
+
+#endmacro 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_SunkShip, 6
+
+    #define _Game_SunkShip_localvar_start_x           3
+    #define _Game_SunkShip_localvar_start_y           4
+    #define _Game_SunkShip_localvar_end_x             5
+    #define _Game_SunkShip_localvar_end_y             6
+    #define _Game_SunkShip_localvar_x                 7
+    #define _Game_SunkShip_localvar_y                 8
+ 
+    #define _Game_SunkShip_localarg_placement_state   9
+    #define _Game_SunkShip_localarg_s                10
 
 
     LOAD_SP R6
 
-    LWI R7, _Game_ShootToField_localarg_placement_state
-    ADD R0, R7, R6
-
-    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localarg_x, R6
-    LOAD_OFFSET_IMM_REG R2, _Game_ShootToField_localarg_y, R6
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localarg_s, R6
     
-    ARRAY_INDEX_REG_REG R0, R0, R2, 20 // FIELD_SIZE * sizeof(fieldcell_t)
-    ARRAY_INDEX_REG_REG R0, R0, R1, 2  //              sizeof(fieldcell_t)
+    OFFSET_STRUCT_REG_IMM R1, R0, ship_t_x_offset
+    LWD R1, R1
+    DEC R3, R1
+    STORE_OFFSET_IMM_REG R3, _Game_SunkShip_localvar_start_x, R6
 
+    OFFSET_STRUCT_REG_IMM R2, R0, ship_t_y_offset
+    LWD R2, R2
+    DEC R3, R2
+    STORE_OFFSET_IMM_REG R3, _Game_SunkShip_localvar_start_y, R6
+
+    OFFSET_STRUCT_REG_IMM R3, R0, ship_t_size_offset
+    LWD R3, R3
+
+    // R0 - s
+    // R1 - s->x
+    // R2 - s->y
+    // R3 - s->size
+
+    OFFSET_STRUCT_REG_IMM R4, R0, ship_t_horizontal_offset
+    LWD R4, R4
+    LWI R7, _Game_SunkShip_not_horizontal
+    JEZ R7, R4
+
+    ADD R1, R1, R3
+    INC R2, R2
+
+    JMP _Game_SunkShip_fill_cell_miss
+
+
+_Game_SunkShip_not_horizontal:
+
+    INC R1, R1
+    ADD R2, R2, R3
+
+_Game_SunkShip_fill_cell_miss:
+
+    STORE_OFFSET_IMM_REG R1, _Game_SunkShip_localvar_end_x, R6
+    STORE_OFFSET_IMM_REG R2, _Game_SunkShip_localvar_end_y, R6
+
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_start_y, R6
+    STORE_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_y, R6
+
+    // R0 - y 
+    // R1 - x
+    // R2 - field_ptr
+    // R3 - 
+    // R4 - 
+    // R5 - 
+    // R6 - SP 
+    // R7 -
+
+
+_Game_SunkShip_fill_cell_miss_y_loop:
+
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_y, R6
+    LOAD_OFFSET_IMM_REG R1, _Game_SunkShip_localvar_end_y, R6
+    LWI R7, _Game_SunkShip_fill_cell_sunk
+    JPG R7, R0, R1
+
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_start_x, R6
+    STORE_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_x, R6
+
+_Game_SunkShip_fill_cell_miss_x_loop:
+
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_x, R6
+    LOAD_OFFSET_IMM_REG R1, _Game_SunkShip_localvar_end_x, R6
+    LWI R7, _Game_SunkShip_fill_cell_miss_y_loop_end
+    JPG R7, R0, R1
+
+    LOAD_OFFSET_IMM_REG R1, _Game_SunkShip_localvar_y, R6
+    LWI R2, FIELD_SIZE
+    LWI R7, _Game_SunkShip_fill_cell_miss_x_loop_end
+
+    // if (x < 0 || x >= FIELD_SIZE || y < 0 || y >= FIELD_SIZE)
+    //      continue;
+    
+    JLZ R7, R0
+    JLZ R7, R1
+    JGQ R7, R0, R2
+    JGQ R7, R1, R2
+
+    LOAD_OFFSET_IMM_REG R3, _Game_SunkShip_localarg_placement_state, R6
+    OFFSET_STRUCT_REG_IMM R3, R3, placement_state_t_field_offset
+    
+    ARRAY_INDEX_REG_REG R3, R3, R1, 20 // FIELD_SIZE * sizeof(fieldcell_t)
+    ARRAY_INDEX_REG_REG R3, R3, R0, 2  //              sizeof(fieldcell_t)
+    
+    OFFSET_STRUCT_REG_IMM R3, R3, fieldcell_t_state_offset
+
+    LWI R4, CELL_MISS
+    SWD R3, R4
+
+_Game_SunkShip_fill_cell_miss_x_loop_end:
+    
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_x, R6
+    INC R0, R0
+    STORE_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_x, R6
+    JMP _Game_SunkShip_fill_cell_miss_x_loop
+
+_Game_SunkShip_fill_cell_miss_y_loop_end:
+    
+    LOAD_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_y, R6
+    INC R0, R0
+    STORE_OFFSET_IMM_REG R0, _Game_SunkShip_localvar_y, R6
+    JMP _Game_SunkShip_fill_cell_miss_y_loop
+
+
+_Game_SunkShip_fill_cell_sunk:
+ENDFUNCTION
+
+#macro Game_SunkShip placement_state, s
+    PUSH_PREV_SP
+    PUSH s
+    PUSH placement_state
+    CALL _Game_SunkShip
+#endmacro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCTION _Game_ShootToField, 2
+
+    #define _Game_ShootToField_localvar_cell 3
+    #define _Game_ShootToField_localvar_s    4
+
+    #define _Game_ShootToField_localarg_res              5
+    #define _Game_ShootToField_localarg_placement_state  6
+    #define _Game_ShootToField_localarg_x                7
+    #define _Game_ShootToField_localarg_y                8
+
+    LOAD_SP R6
+    
+    // fieldcell_t* cell = &placement_state->field[y][x];
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_placement_state, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_field_offset
+    
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localarg_y, R6
+    ARRAY_INDEX_REG_REG R0, R0, R1, 20 // FIELD_SIZE * sizeof(fieldcell_t)
+    
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localarg_x, R6
+    ARRAY_INDEX_REG_REG R0, R0, R1, 2 // sizeof(fieldcell_t)
+    
     STORE_OFFSET_IMM_REG R0, _Game_ShootToField_localvar_cell, R6
     
-    //LOAD_OFFSET_IMM_REG R3, 
-
-
-    OFFSET_STRUCT_REG_IMM R3, R0, fieldcell_t_state_offset
-    LWD R4, R3
-
-
-    LWI R7, _Game_ShootToField_case_cell_ship
+    // fieldcell_t res = *cell;
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localarg_res, R6
+    LWD R2, R0
+    SWD R1, R2
+    INC R1, R1
+    INC R0, R0
+    LWD R2, R0
+    SWD R1, R2
+    
+    // Восстанавливаем указатель на cell
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localvar_cell, R6
+    
+    // switch (cell->state)
+    OFFSET_STRUCT_REG_IMM R1, R0, fieldcell_t_state_offset
+    LWD R2, R1  // R2 = cell->state
+    
+    // case CELL_EMPTY:
+    LWI R7, _Game_ShootToField_check_cell_ship
     LWI R5, CELL_EMPTY
-    JNQ R7, R4, R5
+    JNQ R7, R2, R5  // Если НЕ равно CELL_EMPTY, переходим к следующей проверке
+
+    // Здесь код для CELL_EMPTY
+    LWI R5, CELL_MISS
+    SWD R1, R5  // cell->state = CELL_MISS
+    LOAD_OFFSET_IMM_REG R2, _Game_ShootToField_localarg_res, R6
+    OFFSET_STRUCT_REG_IMM R2, R2, fieldcell_t_state_offset
+    SWD R2, R5  // res.state = CELL_MISS
+    
+    JMP _Game_ShootToField_return
+
+_Game_ShootToField_check_cell_ship:
+    // case CELL_SHIP:
+    LWI R7, _Game_ShootToField_case_default
+    LWI R5, CELL_SHIP
+    JNQ R7, R2, R5 
+    
+    LOAD_OFFSET_IMM_REG R2, _Game_ShootToField_localarg_placement_state, R6
+    OFFSET_STRUCT_REG_IMM R2, R2, placement_state_t_ships_offset
+    // R2 = placement_state->ships
+
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R3, R0, fieldcell_t_ship_index_offset
+    LWD R3, R3  // R3 = cell->ship_index
+
+    // s = placement_state->ships + cell->ship_index;
+    LWI R4, 5  // sizeof(ship_t) в словах
+    MUL R3, R3, R4
+    ADD R2, R2, R3  // R2 = s
+
+    STORE_OFFSET_IMM_REG R2, _Game_ShootToField_localvar_s, R6
+
+    LOAD_OFFSET_IMM_REG R3, _Game_ShootToField_localarg_x, R6
+    LOAD_OFFSET_IMM_REG R4, _Game_ShootToField_localarg_y, R6
+
+    // DamageShip(s, x, y)
+    Game_DamageShip R2, R3, R4
+
+    LOAD_SP R6
+    LWI R7, _Game_ShootToField_ship_not_sunked
+    JEZ R7, R0 
+
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_placement_state, R6
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localvar_s, R6
+    
+    // SunkShip(placement_state, s)
+    Game_SunkShip R0, R1
+    LOAD_SP R6
+
+    // res.state = CELL_SUNK
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_res, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    LWI R5, CELL_SUNK
+    SWD R0, R5
+    
+    // bg_blink_counter = 10
+    LWI R5, 10
+    STORE_OFFSET_IMM_IMM R5, globalvar_bg_blink_counter, RAM_BASE_ADDR
+
+    LOAD_SP R6
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_placement_state, R6
+
+    OFFSET_STRUCT_REG_IMM R1, R0, placement_state_t_ships_count_offset
+    LWD R2, R1
+    DEC R2, R2
+    SWD R1, R2
+
+    LWI R7, _Game_ShootToField_remove_sunked_ship
+    JNZ R7, R2
+
+    LWI R5, 0xFFFF
+    STORE_OFFSET_IMM_IMM R5, globalvar_all_ships_destroyed, RAM_BASE_ADDR
+
+_Game_ShootToField_remove_sunked_ship:
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_placed_ships_offset
+    
+    // MAX_SHIPS_SIZE - s->size
+    LOAD_OFFSET_IMM_REG R1, _Game_ShootToField_localvar_s, R6
+    OFFSET_STRUCT_REG_IMM R1, R1, ship_t_size_offset
+    LWD R1, R1
+    LWI R7, MAX_SHIPS_SIZE
+    SUB R1, R7, R1
+
+    ARRAY_INDEX_REG_REG R0, R0, R1, 1
+    LWD R1, R0
+    DEC R1, R1
+    SWD R0, R1
 
     JMP _Game_ShootToField_return
 
+_Game_ShootToField_ship_not_sunked:
+    // Корабль не потоплен
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    LWI R5, CELL_HIT
+    SWD R0, R5  // cell->state = CELL_HIT
 
-_Game_ShootToField_case_cell_ship:
-    
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_res, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    SWD R0, R5  // res.state = CELL_HIT
+
+    LWI R5, 5
+    STORE_OFFSET_IMM_IMM R5, globalvar_bg_blink_counter, RAM_BASE_ADDR
+
+    JMP _Game_ShootToField_return
+
+_Game_ShootToField_case_default:
+    // default case
+    LWI R5, CELL_DONT_SHOT
+    LOAD_OFFSET_IMM_REG R0, _Game_ShootToField_localarg_res, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    SWD R0, R5  // res.state = CELL_DONT_SHOT
+
 _Game_ShootToField_return:
+    RETURN
 ENDFUNCTION
 
 
@@ -52,8 +439,8 @@ ENDFUNCTION
 
     PUSH_PREV_SP
 
-    PUSH x
     PUSH y
+    PUSH x
     PUSH placement_state
     PUSH cell_ptr
 
@@ -94,28 +481,123 @@ ENDFUNCTION
 
 FUNCTION _Game_ServerShoot, 3
 
-    LWI R7, NET_BASE_ADDR
-    LWI R6, NET_SEND_PACKET
+    #define _Game_ServerShoot_localvar_cell 3 // sizeof == 2 (state, ship_index)
+    #define _Game_ServerShoot_localvar_s    5 // ship_t* pointer
 
-    ADD R1, R6, R7
-    INC R1, R1
-
-    // only for test now
-
-    LWI R0, CELL_HIT
-
-    SWD R1, R0
+    LOAD_SP R6
     
-    INC R1, R1
+    // Создаем локальную переменную cell на стеке
+    LWI R7, _Game_ServerShoot_localvar_cell
+    ADD R0, R6, R7  // R0 = &cell (указатель на fieldcell_t)
+    
+    // Загружаем аргументы для Game_ShootToField
+    OFFSET_IMM_IMM R1, globalvar_enemy_placement_state, RAM_BASE_ADDR
+    LOAD_OFFSET_IMM_IMM R2, globalvar_my_cursor_x, RAM_BASE_ADDR
+    LOAD_OFFSET_IMM_IMM R3, globalvar_my_cursor_y, RAM_BASE_ADDR
+    
+    // Вызов Game_ShootToField(&cell, enemy_placement_state, my_cursor_x, my_cursor_y)
+    Game_ShootToField R0, R1, R2, R3
+    // После вызова cell содержит результат
+    
+    LOAD_SP R6
+    
+    // outgoing_packet.data[0] = cell.state;
+    OFFSET_IMM_REG R0, _Game_ServerShoot_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    LWD R1, R0  // R1 = cell.state
+    
+    LWI R2, NET_BASE_ADDR
+    LWI R3, NET_SEND_PACKET
+    ADD R2, R2, R3
+    INC R2, R2  // R2 = &outgoing_packet.data[0]
+    SWD R2, R1
+    
+    // outgoing_packet.data[1] = my_cursor_x;
+    INC R2, R2
     LOAD_OFFSET_IMM_IMM R0, globalvar_my_cursor_x, RAM_BASE_ADDR
-    SWD R1, R0
-
-    INC R1, R1
+    SWD R2, R0
+    
+    // outgoing_packet.data[2] = my_cursor_y;
+    INC R2, R2
     LOAD_OFFSET_IMM_IMM R0, globalvar_my_cursor_y, RAM_BASE_ADDR
-    SWD R1, R0
+    SWD R2, R0
 
+    LOAD_SP R6
+    OFFSET_IMM_REG R0, _Game_ServerShoot_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R0, R0, fieldcell_t_state_offset
+    LWD R1, R0  
+    
+    LWI R5, CELL_SUNK
+    LWI R7, _Game_ServerShoot_not_sunked
+    JNQ R7, R1, R5
+    
+    // s = enemy_placement_state.ships + cell.ship_index;
+    OFFSET_IMM_IMM R0, globalvar_enemy_placement_state, RAM_BASE_ADDR
+    OFFSET_STRUCT_REG_IMM R0, R0, placement_state_t_ships_offset 
+    // R0 - enemy_placement_state.ships
+    
+    LOAD_SP R6
+    OFFSET_IMM_REG R1, _Game_ServerShoot_localvar_cell, R6
+    OFFSET_STRUCT_REG_IMM R1, R1, fieldcell_t_ship_index_offset
+    LWD R1, R1  // R1 = cell.ship_index
+    
+    // Умножаем индекс на размер структуры ship_t (5 слов)
+    ARRAY_INDEX_REG_REG R0, R0, R1, 5
+    STORE_OFFSET_IMM_REG R0, _Game_ServerShoot_localvar_s, R6
+
+    // outgoing_packet.data[3] = s->x;
+    LWI R2, NET_BASE_ADDR
+    LWI R3, NET_SEND_PACKET
+    ADD R2, R2, R3
+    INC R2, R2
+    LWI R3, 3
+    ADD R2, R2, R3  // R2 = &outgoing_packet.data[3]
+    
+    OFFSET_STRUCT_REG_IMM R3, R0, ship_t_x_offset
+    LWD R3, R3  // R3 = s->x
+    SWD R2, R3
+    
+    // outgoing_packet.data[4] = s->y;
+    INC R2, R2
+    OFFSET_STRUCT_REG_IMM R3, R0, ship_t_y_offset
+    LWD R3, R3  // R3 = s->y
+    SWD R2, R3
+    
+    // outgoing_packet.data[5] = s->size;
+    INC R2, R2
+    OFFSET_STRUCT_REG_IMM R3, R0, ship_t_size_offset
+    LWD R3, R3  // R3 = s->size
+    SWD R2, R3
+    
+    // outgoing_packet.data[6] = s->horizontal;
+    INC R2, R2
+    OFFSET_STRUCT_REG_IMM R3, R0, ship_t_horizontal_offset
+    LWD R3, R3  // R3 = s->horizontal
+    SWD R2, R3
+    
+    JMP _Game_ServerShoot_return
+
+_Game_ServerShoot_not_sunked:
+
+    // else блок из C кода: need_switch = cell.state == CELL_MISS;
+    
+    // Проверяем cell.state == CELL_MISS
+    // R1 все еще содержит cell.state
+    LWI R5, CELL_MISS
+    LWI R0, 0x0000  // Предполагаем false (0)
+    
+    LWI R7, _Game_ServerShoot_set_need_switch_true
+    JEQ R7, R1, R5
+    
+    // Если не равно CELL_MISS, то уже false
+    JMP _Game_ServerShoot_store_need_switch
+
+_Game_ServerShoot_set_need_switch_true:
+    LWI R0, 0xFFFF  
+_Game_ServerShoot_store_need_switch:
+    STORE_OFFSET_IMM_IMM R0, globalvar_need_switch, RAM_BASE_ADDR
+_Game_ServerShoot_return:
 ENDFUNCTION
-
 
 #macro Game_ServerShoot
     PUSH_PREV_SP
@@ -315,23 +797,7 @@ ENDFUNCTION
 
 
 
-FUNCTION _Game_SunkShip, 0
 
-    
-
-ENDFUNCTION
-
-
-#macro Game_SunkShip placement_state, s
-
-    PUSH_PREV_SP
-
-    PUSH s
-    PUSH placement_state
-
-    CALL _Game_SunkShip
-
-#endmacro
 
 
 
@@ -367,7 +833,6 @@ FUNCTION _Game_ProcessReceivedCell, 1
     LWI R5, CELL_HIT
     JNQ R7, R1, R5
 
-    NOP
     SWD R0, R1
 
     LWI R1, 5
@@ -400,8 +865,7 @@ _Game_ProcessReceivedCell_cell_miss:
     LWI R5, CELL_MISS
     JNQ R7, R1, R5
 
-    NOP
-    SWD R0, R1
+    SWD R0, R1 
 
     JMP _Game_ProcessReceivedCell_return
     
@@ -460,7 +924,6 @@ FUNCTION _Game_Client_HandleShootRequest, 0
     LWI R6, RAM_BASE_ADDR
     LWI R7, globalvar_enemy_placement_state
     ADD R2, R6, R7
-    NOP
     OFFSET_STRUCT_REG_IMM R2, R2, placement_state_t_ships_offset
 
     // s->x = incomming_packet.data[3];
@@ -550,6 +1013,53 @@ ENDFUNCTION
 
 
 
+#macro Game_Server_HandleShootResponse
+    Game_EndWaitRemote
+#endmacro
+
+
+
+
+
+
+
+
+FUNCTION _Game_Client_HandleShootResponse, 2
+
+ENDFUNCTION
+
+
+
+#macro Game_Client_HandleShootResponse
+    PUSH_PREV_SP
+    CALL _Game_Client_HandleShootResponse
+#endmacro
+
+
+
+FUNCTION _Game_HandleShootResponse, 0
+
+    LOAD_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
+    LWI R7, _Game_HandleShootResponse_not_server_mode
+    JEZ R7, R0
+
+    Game_Server_HandleShootResponse
+
+_Game_HandleShootResponse_not_server_mode:
+    Game_Client_HandleShootResponse
+
+ENDFUNCTION
+
+
+
+
+#macro Game_HandleShootResponse
+    PUSH_PREV_SP
+    CALL _Game_HandleShootResponse
+#endmacro
+
+
+
 
 
 
@@ -625,7 +1135,7 @@ _Game_HandleRemoteInput_check_shoot_response:
     JNQ R7, R1, R2
 
     // HandleShootResponse();
-    // Game_HandleShootResponse
+    Game_HandleShootResponse
     JMP _Game_HandleRemoteInput_check_loop
 
 _Game_HandleRemoteInput_check_turn_request:
