@@ -1,32 +1,11 @@
 #ifndef _GAME_ASM_
 #define _GAME_ASM_
 
-
 #include "../sys/sys.asm"
 #include "../globalvars/globalvars.asm"
 #include "../video/video.asm"
 #include "../keyboard/keyboard.asm"
 #include "../net/net.asm"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 FUNCTION _Game_UpdateWaitRemote, 0
 
@@ -69,25 +48,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_UpdateWaitRemote
 #endmacro 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 FUNCTION _Game_HandleCursorMovement, 0
