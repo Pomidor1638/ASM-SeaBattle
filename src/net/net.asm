@@ -11,7 +11,7 @@
 #define NET_PACKET_TYPE_OFFSET 0
 
 // [0000 00SP AAAA AAAA]
-// A - availability (it's could be just 1 bit, but anyway)
+// A - availability (it's could be just 1 bit, but anyway ...)
 // S - send
 // P - pull
 
