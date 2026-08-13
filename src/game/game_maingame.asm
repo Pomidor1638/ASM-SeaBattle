@@ -87,28 +87,6 @@ ENDFUNCTION
 #endmacro 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_SunkShip, 6
 
     #define _Game_SunkShip_localvar_start_x           3
@@ -315,35 +293,6 @@ ENDFUNCTION
 #endmacro
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_ShootToField, 2
 
     #define _Game_ShootToField_localvar_cell 3
@@ -520,36 +469,6 @@ ENDFUNCTION
 #endmacro
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_ServerShoot, 3
 
     #define _Game_ServerShoot_localvar_cell 3 // sizeof == 2 (state, ship_index)
@@ -676,31 +595,6 @@ ENDFUNCTION
 #endmacro
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_SendMyCursorToEnemy, 0
 
     LOAD_SP R6
@@ -800,41 +694,6 @@ ENDFUNCTION
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_HandleMyTurnInput, 0
 
     Game_HandleCursorMovement
@@ -846,11 +705,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_HandleMyTurnInput
 #endmacro
-
-
-
-
-
 
 
 FUNCTION _Game_Server_HandleShootRequest, 3
@@ -973,11 +827,6 @@ ENDFUNCTION
 
 
 
-
-
-
-
-
 FUNCTION _Game_ProcessReceivedCell, 1
 
 
@@ -1049,11 +898,6 @@ _Game_ProcessReceivedCell_cell_miss:
 _Game_ProcessReceivedCell_cell_dont_shot:
 _Game_ProcessReceivedCell_return:
 ENDFUNCTION
-
-
-
-
-
 
 
 #macro Game_ProcessReceivedCell placement_state, state, s, x, y
@@ -1149,14 +993,6 @@ ENDFUNCTION
 
 
 
-
-
-
-
-
-
-
-
 FUNCTION _Game_HandleShootRequest, 0
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_server_mode, RAM_BASE_ADDR
@@ -1180,25 +1016,9 @@ ENDFUNCTION
 #endmacro
 
 
-
-
-
-
-
-
-
-
-
-
 #macro Game_Server_HandleShootResponse
     Game_EndWaitRemote
 #endmacro
-
-
-
-
-
-
 
 
 FUNCTION _Game_Client_HandleShootResponse, 2
@@ -1328,22 +1148,6 @@ ENDFUNCTION
     CALL _Game_HandleTurnRequest
 #endmacro
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_HandleTurnResponse, 0
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_my_turn, RAM_BASE_ADDR
@@ -1358,11 +1162,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_HandleTurnResponse
 #endmacro
-
-
-
-
-
 
 
 
@@ -1390,14 +1189,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_HandleEndGameRequest
 #endmacro
-
-
-
-
-
-
-
-
 
 
 FUNCTION _Game_HandleEndGameResponse, 0
@@ -1539,31 +1330,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_HandleRemoteInput
 #endmacro
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 FUNCTION _Game_MainGame, 0
