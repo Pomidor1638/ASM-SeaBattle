@@ -5,6 +5,11 @@
 #include "../globalvars/globalvars.asm"
 #include "../string/string.asm"
 
+// MMIO of VIDEO is just memory with format
+// [ FFFF BBBB CCCCCCCC ]
+// F - front colour
+// B - back  one
+// C - char (from ROM)
 
 FUNCTION _Video_Clear, 0
 
