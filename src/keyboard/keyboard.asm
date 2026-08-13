@@ -19,6 +19,12 @@
 #define SCANCODE_RETURN 0x005A
 #define SCANCODE_ESCAPE 0x0076
 
+// Keyboard MMIO:
+// [0000 00P1 SSSS SSSS]
+// S - PS/2 scancode bits
+// P - key pressed flag
+// If the register value is 0, there is no keyboard event.
+
 FUNCTION _Input_Update_Keyboard_states, 0
 
 // update prev states
