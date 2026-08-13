@@ -5,18 +5,18 @@
 #include "sys_stack.asm"
 #include "sys_mem.asm"
 
-// STACK FRAME
+// STACK FUNCTION FRAME
 
 // <HIGHER ADDRESS>
 //
-//     < prev frame     >
+//     < prev func frame >
 //
-// ... [ ARGUMENTS      ]
-//   3 [ LOCAL VARS     ]
-//   2 [ PREVIOS SP     ]
-//   1 [ RETURN ADDRESS ] <- BP
+// ... [ ARGUMENTS       ] (any args count)
+//   3 [ LOCAL VARS      ]
+//   2 [ PREVIOUS SP     ]
+//   1 [ RETURN ADDRESS  ] <- BP
 //
-//   0 < next frame     > <- SP
+//   0 < next func frame > <- SP
 // 
 // <LOWER ADDRESS>
 
@@ -83,26 +83,25 @@ _func_macro_name_:
     SWD R6, R7
 #endmacro
 
-//
 // For Using functions do this:
 //
 // EXAMPLE print(char* fmt)
 //
-// FUNCTION _printf, 0 <- allocate local words
+// FUNCTION _print, 0 <- allocate local words
 //  ... do something
 // ENDFUNCTION
 // 
 //
 //
 //
-// #macro printf str_ptr_imm 
+// #macro print str_ptr_imm 
 //      PUSH_PREV_SP // NECESSARILY !!!
 //
-//      //!!! PUSH ARGS TO STACK IN REVERSE ORDER (right to left) !!!
+//      //!!! PUSH ARGS INTO STACK IN REVERSE ORDER (like __cdecl) !!!
 //      LWI R5, str_ptr_imm 
 //      PUSH R5 // PUSHING ARG TO STACK
 // 
-//      CALL _printf // NECESSARILY !!!
+//      CALL _print // NECESSARILY !!!
 //
 // #endmacro
 //
@@ -112,11 +111,10 @@ _func_macro_name_:
 //
 // !!!!!!!! NEVER USE PUSH AND POP IN FUNCTION BLOCK (or use very carefull)   !!!!!!!!
 // !!!!!!!! ALL FUNCTIONS DISTORTS ALL REGS                                   !!!!!!!!
-// !!!!!!!! functions return's value contains only in R0                      !!!!!!!!
+// !!!!!!!! functions returns value only into R0                              !!!!!!!!
 // !!!!!!!! DO NOT USE RETURN IN FUNC BLOCK, use <_func_name_> return instead !!!!!!!!
 //
 // it's possible to load args from regs [R0, R1, R2]
 // !!!!!!!! USE VERY CAREFULL !!!!!!!!
-//
 
 #endif
