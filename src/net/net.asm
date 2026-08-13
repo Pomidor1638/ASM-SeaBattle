@@ -10,7 +10,7 @@
 
 #define NET_PACKET_TYPE_OFFSET 0
 
-// [0000 00SP AAAA AAAA]
+// [0000 00SP AAAA AAAA] <- target COM module's MMIO
 // A - availability (it's could be just 1 bit, but anyway ...)
 // S - send
 // P - pull
