@@ -28,7 +28,7 @@
 // This macroses distort R7 and R6 regs,
 // !!! NEVER USE R7 in args !!!
 
-// don't use R6
+// don't use R6 in args
 #macro LOAD_OFFSET_IMM_IMM reg_dst, imm_offset, imm_base
 	LWI R7, imm_base
 	LWI R6, imm_offset
@@ -36,7 +36,7 @@
 	LWD reg_dst, R7
 #endmacro
 
-// don't use R6
+// don't use R6 in args
 #macro STORE_OFFSET_IMM_IMM reg_src, imm_offset, imm_base
 	LWI R7, imm_base
 	LWI R6, imm_offset
