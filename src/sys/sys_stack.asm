@@ -15,23 +15,23 @@
 
 #macro PUSH reg 
 	
-	LWI R6, SP_PTR // R7 <- SP_PTR
-	LWD R7, R6 // (SP) R7 <- mem[SP_PTR] 
-	SWD R7, reg // mem[SP] <- reg
+	LWI R6, SP_PTR	// R7 <- SP_PTR
+	LWD R7, R6		// (SP) R7 <- mem[SP_PTR] 
+	SWD R7, reg		// mem[SP] <- reg
 
-	DEC R7, R7 // SP--
-	SWD R6, R7     // mem[SP_PTR] <- SP
+	DEC R7, R7		// SP--
+	SWD R6, R7		// mem[SP_PTR] <- SP
 
 #endmacro
 
 #macro POP reg
 
-	LWI R6, SP_PTR // R7 <- SP_PTR
-	LWD R7, R6 // (SP) R7 <- mem[SP_PTR] 
-	INC R7, R7 // SP++
+	LWI R6, SP_PTR	// R7 <- SP_PTR
+	LWD R7, R6		// (SP) R7 <- mem[SP_PTR] 
+	INC R7, R7		// SP++
 
-	LWD reg, R7 // reg <- mem[SP]
-	SWD R6, R7     // mem[SP_PTR] <- SP
+	LWD reg, R7		// reg <- mem[SP]
+	SWD R6, R7		// mem[SP_PTR] <- SP
 
 #endmacro
 

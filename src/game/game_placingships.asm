@@ -3,17 +3,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 FUNCTION _Game_PrevShipSize, 3
 
     #define _Game_PrevShipSize_localvar_index            3
@@ -95,8 +84,6 @@ _Game_PrevShipSize_check_count:
     JMP _Game_PrevShipSize_loop
 
 _Game_PrevShipSize_send_error:
-
-
    
 _Game_PrevShipSize_return:
     LOAD_OFFSET_IMM_REG R0, _Game_PrevShipSize_localarg_ship_state_ptr, R6 // *ship_state
@@ -115,22 +102,6 @@ ENDFUNCTION
 
     CALL _Game_PrevShipSize
 #endmacro
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -238,14 +209,6 @@ ENDFUNCTION
 
 
 
-
-
-
-
-
-
-
-
 FUNCTION _Game_HandleShipMovement, 0
 
     LOAD_OFFSET_IMM_IMM R0, globalvar_my_cursor_x, RAM_BASE_ADDR
@@ -318,8 +281,6 @@ ENDFUNCTION
     PUSH_PREV_SP
     CALL _Game_HandleShipMovement
 #endmacro
-
-
 
 
 

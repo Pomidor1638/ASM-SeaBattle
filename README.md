@@ -1,163 +1,167 @@
-# 16-bit RISC Processor
+# ASM Sea Battle
 
-Technical Documentation and Architecture Specification
+Battleship game written in assembly for a custom 16-bit FPGA computer.
 
-## 1\. Overview
+The project is a complete software demo for my own computer platform: it runs on a custom RISC-like CPU, draws a text-mode interface through VGA memory, reads PS/2 keyboard input, and exchanges game packets between two systems.
 
-This project implements a 16-bit RISC processor with a fixed instruction format and a multi-cycle execution model. The architecture is designed for clarity, simplicity of RTL implementation, and ease of extension.
+## Demo
 
-Key characteristics:
+### Mode Selection
 
-* Word width: 16 bits
-* Register file: 8 general-purpose registers (R0–R7)
-* Opcode width: 7 bits
-* Instruction size: 16 bits
-* Immediate-type instructions use two consecutive memory words
-* Control implemented as a finite-state machine without pipelining
+![Mode selection](docs/choose_mode.png)
 
-## 2\. Instruction Format
+### Ship Placement
 
-All instructions have a unified 16-bit layout:
+![Ship placement](docs/placing_ships.png)
 
-```
-    [15:9]   opcode (7 bits)
-    [ 8:6]   rd     (3 bits)
-    [ 5:3]   rs     (3 bits)
-    [ 2:0]   rt     (3 bits)
-```
+### Battle
 
-Immediate-type instructions fetch the full 16-bit operand from the next memory word located at `PC + 1`.
+![Battle screen](docs/main_game.png)
 
-## 3\. Instruction Set
+### Endgame
 
-### 3.1. R-type Instructions (Single 16-bit Word)
+![Endgame screen](docs/end_game.png)
 
-Format:
+## Features
 
-```
-    opcode | rd | rs | rt
-```
+- full Battleship game loop
+- server/client mode selection
+- connection waiting state
+- ship placement on a 10x10 field
+- local and enemy field rendering
+- keyboard-controlled cursor
+- hit, miss, damaged ship, sunk ship, and endgame handling
+- packet-based communication between two players
 
-#### Arithmetic
+## Running In The Emulator
 
-* ADD  rd, rs, rt
-* SUB  rd, rs, rt
-* ADC  rd, rs, rt
-* SBB  rd, rs, rt
-* MUL  rd, rs, rt
-* UML  rd, rs, rt
-* INC  rd, rs
-* DEC  rd, rs
+The repository includes the assembler and emulator binaries that were used during development.
 
-#### Logic
+Run these commands from the repository root:
 
-* AND  rd, rs, rt
-* ORR  rd, rs, rt
-* XOR  rd, rs, rt
-* NOT  rd, rs
-* TCP  rd, rs
-
-#### Shifts
-
-* SLL  rd, rs, rt
-* SRL  rd, rs, rt
-* SRA  rd, rs, rt
-
-#### Half-word operations
-
-* MHL rd, rs, rt
-* MLH rd, rs, rt
-* MLL rd, rs, rt
-* MHH rd, rs, rt
-
-#### Data movement
-
-* MOV rd, rs
-* LWD rd, rs
-* SWD rt, rs
-* LPC rd
-
-#### Jumps and branches
-
-* JPR rd
-* JRL rd, rs
-* JGZ rd, rs
-* JLZ rd, rs
-* JEZ rd, rs
-* JNZ rd, rs
-* JPC rd
-* JOV rd
-* JEQ rd, rs, rt
-* JNQ rd, rs, rt
-* JPG rd, rs, rt
-* JPL rd, rs, rt
-
-### 3.2. Immediate-Type Instructions (Two Words)
-
-#### LWI rd, imm
-
-The first word contains opcode and rd; the second word contains a full 16-bit immediate.
-
-Semantics:
-
-```
-    rd = imm
-    PC = PC + 2
+```powershell
+New-Item -ItemType Directory -Force build
+.\tools\asm.exe .\src\main.asm .\build\SeaBattle.bin -rom_size 16384
+.\tools\emulator\emulator.exe
 ```
 
-#### JMP imm
+Then open the generated ROM image in the emulator:
 
-Performs an unconditional jump to the address stored in the next memory word.
-
-#### NOP
-
-No operation.
-
-#### HLT
-
-Halts the processor.
-
-## 4\. Processor State Machine
-
-The multi-cycle execution flow consists of:
-
-1. FETCH
-2. DECODE
-3. EXECUTE
-4. WRITE\_BACK
-5. HALTED
-
-Memory access is synchronized via a hold signal for slow memory.
-
-## 5\. Control Signals
-
-* Jump
-* MemRead
-* MemWrite
-* RegWrite
-* LinkToRF
-* Immediate
-* Movement
-* Halt
-* Nop
-
-## 6\. Project Structure
-
-* cpu.v — main processor module
-* control.v — instruction decoding and control logic
-* rf.v — register file
-* alu.v — arithmetic and logic unit
-* opcode.v — opcode definitions
-* aluop.v — ALU operation codes
-* common.v — shared parameters
-
-## 7\. Example Program
-
-```
-    LWI R1, 0x1234 
-    ADD R2, R1, R1
-    JEZ R3, R2
-    LWD R4, R3
-    HLT
+```text
+File -> Open -> build/SeaBattle.bin
 ```
 
+For a two-player session, run two emulator instances or two hardware systems connected through the platform packet interface.
+
+## Building For FPGA ROM
+
+The assembler can also generate Verilog-friendly ROM data:
+
+```powershell
+New-Item -ItemType Directory -Force build
+.\tools\asm.exe .\src\main.asm .\build\SeaBattle.txt -rom_size 16384 -verilog
+```
+
+The generated file can be used as the program ROM contents for the FPGA computer.
+
+## Controls
+
+- Arrow keys: move cursor / change menu selection
+- Enter: select mode, place ship, confirm action, shoot
+- Q / E: choose previous or next ship size during placement
+- R: rotate ship during placement
+- Escape: cancel/remove during placement or leave waiting states
+
+## Project Structure
+
+```text
+ASM-SeaBattle/
+  src/
+    main.asm                         Program entry point and main loop
+    game/                            Game-state logic and rules
+    video/                           VGA text-mode rendering routines
+    keyboard/                        PS/2 keyboard state handling
+    net/                             Packet send/receive macros
+    sys/                             Stack, call, and memory helpers
+    string/                          String routines
+    globalvars/                      Memory layout, constants, game data
+
+  tools/
+    asm.exe                          Assembler for the custom CPU
+    emulator/                        Emulator used for local testing
+
+  docs/
+    choose_mode.png                  Mode selection screenshot
+    placing_ships.png                Ship placement screenshot
+    main_game.png                    Battle screenshot
+    end_game.png                     Endgame screenshot
+```
+
+## Architecture
+
+The entry point is intentionally small:
+
+```asm
+START:
+    SYS_INIT
+    Game_Init
+    JMP forever_loop
+
+forever_loop:
+    Game_Tick
+    JMP forever_loop
+```
+
+`Game_Tick` dispatches the current game state and calls the corresponding module:
+
+- `STATE_CHOOSE_MODE`
+- `STATE_WAIT_FOR_CONNECTION`
+- `STATE_PLACING_SHIPS`
+- `STATE_MAIN_GAME`
+- `STATE_GAME_END`
+- `STATE_ERROR`
+
+Rendering is separated into the `video/` module, keyboard polling is isolated in `keyboard/`, and communication helpers are kept in `net/`.
+
+## Packet Protocol
+
+Network communication is implemented through memory-mapped packet registers.
+
+The packet structure is defined as one packet type word followed by seven data words:
+
+```text
+packet.type
+packet.data[0..6]
+```
+
+The game uses packet types for connection setup, ship placement, ready state synchronization, cursor position updates, shots, shot responses, turn switching, and endgame synchronization.
+
+The packet constants are defined in:
+
+```text
+src/globalvars/globalvars.asm
+```
+
+The send/receive macros are defined in:
+
+```text
+src/net/net.asm
+```
+
+## Platform
+
+The target platform is a custom 16-bit computer implemented on FPGA.
+
+The game directly uses:
+
+- program ROM
+- RAM
+- VGA text buffer
+- PS/2 keyboard register
+- memory-mapped packet-transfer registers
+
+## Related Projects
+
+- [Verilog-computer](https://github.com/Pomidor1638/Verilog-computer) - FPGA computer implementation
+- [RISC-Like-processor-s-assembler](https://github.com/Pomidor1638/RISC-Like-processor-s-assembler) - assembler for the custom CPU
+- [CPU-Emulator](https://github.com/Pomidor1638/CPU-Emulator) - emulator/debugger used to test programs before flashing the FPGA
