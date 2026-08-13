@@ -2,6 +2,8 @@
 #ifndef _SYS_STACK_ASM_
 #define _SYS_STACK_ASM_
 
+// Target machine's stack defaults
+
 #define RETURN_BUF_PTR  63113
 #define PREV_SP_BUF_PTR 63112
 #define SP_PTR          63111
