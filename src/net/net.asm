@@ -11,9 +11,9 @@
 #define NET_PACKET_TYPE_OFFSET 0
 
 // [0000 00SP AAAA AAAA]
-// A - доступность
-// S - отправка
-// P - вытягивание
+// A - availability (it's could be just 1 bit, but anyway)
+// S - send
+// P - pull
 
 // pop
 // [0000 0001 0000 0000]
