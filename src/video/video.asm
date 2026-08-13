@@ -6,7 +6,7 @@
 #include "../string/string.asm"
 
 // MMIO of VIDEO is just memory with format
-// [ FFFF BBBB CCCCCCCC ]
+// [ FFFF BBBB CCCC CCCC ]
 // F - front colour
 // B - back  one
 // C - char (from ROM)
